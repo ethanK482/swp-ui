@@ -1,6 +1,6 @@
 import styled from "styled-components";
 const ChangePasswordStyle = styled.div`
-  .signup {
+  .change-password {
     .image {
       background-image: url("https://www.techsmith.com/blog/wp-content/uploads/2020/05/distance-learning.png");
       background-size: contain;

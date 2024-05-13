@@ -17,7 +17,7 @@ justify-content: center;
     height: 40px!important; 
     justify-content: center!important;
     font-size: 15px !important;
-    background-color:blue  !important;
+    background-color: blue  !important;
     
   }
 }

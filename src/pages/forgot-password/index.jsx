@@ -6,11 +6,12 @@ import { useMutation } from '@tanstack/react-query';
 import api from '../../api/http';
 function ForgotpasswordScreen() {
 
-    const forgotPasswordMutation = useMutation({
+    const forgotPasswordMutation = useMutation({ //1
         mutationFn: (body) => {
             return api.post("reset-password", body);
         },
     });
+    
     const onSend = (body) => {
         forgotPasswordMutation.mutate(body, {
             onSuccess() {

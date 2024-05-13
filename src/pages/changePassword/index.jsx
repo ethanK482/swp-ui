@@ -1,53 +1,48 @@
-import { Button, Form, Input, notification } from "antd";
+import { Button, Form, Input } from "antd";
 import { useMutation } from "@tanstack/react-query";
-import {  useNavigate } from "react-router-dom";
-import { gapi } from "gapi-script";
-import { useEffect } from "react";
+import {  useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../api/http";
 import ChangePasswordStyle from "./ChangePassword.style";
-const clientGoogleId =
-    "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
 const ChangePassword = () => {
-    useEffect(() => {
-        gapi.load("client:auth2", () => {
-            gapi.client.init({
-                clientId: clientGoogleId,
-            });
-        });
-    });
-
     const formItemLayout = {
         labelCol: {
             xs: { span: 24 },
             sm: { span: 8 },
         },
     };
-
+    const [searchParams] = useSearchParams();
+    const token  = searchParams.get('token');
     const changePasswordMutation = useMutation({
-        mutationFn: (formData) => {
-            return api.post("change-password", formData);
+        mutationFn: (body) => {
+            return api.post("change-password", body );
         },
+        
     });
 
-    const navigate = useNavigate();
-    const onfinish = (body) => {
-        console.log(body)
+   
+    const onSend = (value) => {
+       const body = {newPassword:value.newPassword, token};
+       changePasswordMutation.mutate(body, {onSuccess(){
+        notification.success({message: "Reset password successfully"})
+       }, onError(){
+        notification.success({message: "Reset password failed, Try again later"})
+       }})
     }
 
 
     return (
         <ChangePasswordStyle>
-            <div className="signup">
+            <div className="change-password">
                 <div className="image">hello</div>
-                <div className="signup_content ">
-                    <span className="signup_content_title" >Reset Password</span>
+                <div className="change-password_content ">
+                    <span className="change-password_content_title" >Reset Password</span>
 
 
                     <Form
-                        onFinish={onfinish}
+                        onFinish={onSend}
                         layout="vertical"
                         {...formItemLayout}
-                        name="register"
+                        name="change-password"
 
                         scrollToFirstError
                     >
@@ -69,27 +64,40 @@ const ChangePassword = () => {
                                 },
                             ]}
                         >
-                            <Input placeholder="Enter your new password" />
+                            <Input.Password placeholder="Enter your new password" />
                         </Form.Item>
                         <Form.Item
-                            name=" confirmpassword"
-                            label="ConfirmPassword"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Please confirm your password!",
-                                },
-                            ]}
-                            hasFeedback
-                        >
-                            <Input.Password placeholder="Confirm your password" />
-                        </Form.Item>
+              name="confirm"
+              label="Confirm"
+              dependencies={["password"]}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: "Please confirm your password!",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("newPassword") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password placeholder="Confirm your email" />
+            </Form.Item>
 
 
                         <Form.Item >
-                            {/* {changePasswordMutation.isPending ? (
+                            {changePasswordMutation.isPending ? (
                                 <Button loading style={{ textAlign: "center" }}>
-                                    Reset
+                                    loading
                                 </Button>
                             ) : (
                                 <Button
@@ -97,16 +105,10 @@ const ChangePassword = () => {
                                     htmlType="submit"
                                     style={{ textAlign: "center" }}
                                 >
-                                    Reset
+                                    reset
                                 </Button>
-                            )} */}
-                              <Button
-                                    size="large"
-                                    htmlType="submit"
-                                    style={{ textAlign: "center" }}
-                                >
-                                    Reset
-                                </Button>
+                            )}
+                              
                         </Form.Item>
 
                     </Form>
