@@ -6,6 +6,7 @@ import VerifyNotification from "../pages/verify";
 import SignInScreen from "../pages/SignIn";
 import ForgotpasswordScreen from "../pages/forgot-password";
 import ChangePassword from "../pages/changePassword";
+import ProfileScreen from "../pages/profile";
 
 const RouterManagement = () => {
   return (
@@ -17,6 +18,7 @@ const RouterManagement = () => {
         <Route path="/verify" element={<VerifyNotification />}></Route>
         <Route path="/forgot-password" element={<ForgotpasswordScreen />}></Route>
         <Route path="/change-password" element={<ChangePassword />}></Route>
+        <Route path="/profile" element={<ProfileScreen />}></Route>
         
       </Route>
     </Routes>
