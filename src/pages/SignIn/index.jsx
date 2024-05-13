@@ -122,7 +122,7 @@ const SignInScreen = () => {
               className="right"
               >
               
-              <Link style={{color:"blue"}} to='/'>Forgot password</Link>
+              <Link style={{color:"blue"}} to='/forgot-password'>Forgot password</Link>
               </Form.Item>
               
 
