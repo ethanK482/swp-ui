@@ -58,7 +58,12 @@ const SignUpScreen = () => {
       {
         onSuccess(data) {
           localStorage.setItem("token", data.data);
+          notification.success({ message: "Login successfully"});
+          navigate(`/`);
         },
+        onError(){
+          notification.success({ message: "Can't login with google"});
+        }
       }
     );
   };

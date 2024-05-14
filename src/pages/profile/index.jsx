@@ -2,10 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Link } from "react-router-dom";
 const ProfileScreen = () => {
-  // axios -> send request to servcer
-  // react query -> quản lý responss
   const token = localStorage.getItem("token");
-  const { isPending, data } = useQuery({
+  const { data } = useQuery({
     queryKey: ["PROFILE"],
     queryFn: () =>
       api.get("/profile", {
@@ -62,7 +60,7 @@ const ProfileScreen = () => {
           </section>
           <section className="relative py-16 bg-blueGray-200">
             <div className="container mx-auto px-4">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-xl rounded-lg -mt-64">
                 <div className="px-6">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
