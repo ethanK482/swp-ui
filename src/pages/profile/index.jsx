@@ -1,7 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Link } from "react-router-dom";
+import { Modal, notification } from 'antd';
+import { useEffect, useState } from "react";
+import { Image } from 'antd';
+import { VerticalAlignTopOutlined, EditOutlined } from '@ant-design/icons';
+import Loading from "../../components/loading";
 const ProfileScreen = () => {
+  const queryClient = new QueryClient();
   const token = localStorage.getItem("token");
   const { data } = useQuery({
     queryKey: ["PROFILE"],
@@ -13,6 +19,83 @@ const ProfileScreen = () => {
       }),
   });
   const user = data?.data;
+  //show modal name
+
+  const changeNameMutation = useMutation({
+    mutationFn: (body) => {
+      return api.post("/update-profile", body, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+
+  });
+
+  const showModalName = () => {
+    setIsModalNameOpen(true);
+  };
+  const [isModalNameOpen, setIsModalNameOpen] = useState(false);
+  const [name, setName] = useState(user?.full_name);
+  useEffect(() => {
+    setName(user?.full_name)
+  }, user)
+  const handleNameOk = () => {
+    const body = { nfull_name: name };
+    changeNameMutation.mutate(body, {
+      onSuccess() {
+        notification.success({ message: "Edit name successfully" })
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+
+      }, onError() {
+        notification.success({ message: "Edit name failed, Try again later" })
+      }
+    })
+    setIsModalNameOpen(false);
+  };
+
+  const handleNameCancel = () => {
+    setIsModalNameOpen(false);
+  };
+
+  //show modal upload avatar
+  const uploadAvatar = useMutation({
+    mutationFn: (formData) => {
+      return api.post("/update-avatar", formData, {
+        headers: { 'content-type': 'multipart/form-data', Authorization: token }
+      });
+    },
+  });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [file, setFile] = useState();
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    if (!file) {
+      return;
+    }
+    let formData = new FormData();
+    formData.append("image", file)
+    uploadAvatar.mutate(formData, {
+      onSuccess() {
+        notification.success({ message: "Update avatar successfully" })
+        window.location.reload();
+      }, onError() {
+        notification.error({ message: "Update avatar failed" });
+      }
+    })
+
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div>
       <>
@@ -64,12 +147,22 @@ const ProfileScreen = () => {
                 <div className="px-6">
                   <div className="flex flex-wrap justify-center">
                     <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
-                      <div className="relative">
-                        <img
-                          alt="..."
-                          src="https://demos.creative-tim.com/notus-js/assets/img/team-2-800x800.jpg"
-                          className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
-                        />
+                      <div className="relative text-center ">
+                        {uploadAvatar.isPending ? <Loading /> : <>
+                          <Image className="w-30 h-30 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 "
+                            width={200}
+                            src={user?.avatar_url}
+                            alt="Bordered avatar" />
+
+
+                          <button onClick={showModal} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+                            <VerticalAlignTopOutlined />
+                            <span>Change avatar</span>
+                          </button>
+                        </>
+                        }
+
+
                       </div>
                     </div>
                     <div className="w-full lg:w-4/12 px-4 lg:order-3 lg:text-right lg:self-center">
@@ -112,15 +205,17 @@ const ProfileScreen = () => {
                     </div>
                   </div>
                   <div className="text-center mt-12">
-                    <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                    {changeNameMutation.isPending ? <Loading /> : <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
                       {user?.full_name}
-                    </h3>
-                    <Link
-                      to="/update-password"
-                      className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-                    >
-                      Update password
-                    </Link>
+                      <button onClick={showModalName}>
+
+                        <EditOutlined />
+
+                      </button>
+                    </h3>}
+
+
+
 
                     <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
                       <i className="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400" />
@@ -185,6 +280,16 @@ const ProfileScreen = () => {
           </section>
         </main>
       </>
+      <Modal title="Update avatar ?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <input onChange={(e) => {
+          setFile(e.target.files[0])
+
+        }} type="file" placeholder="Choose avatar" />
+      </Modal>
+
+      <Modal title="Edit name" open={isModalNameOpen} onOk={handleNameOk} onCancel={handleNameCancel}>
+        <input onChange={(e) => setName(e.target.value)} value={name} className="box-sizing: border-box" placeholder="New name" type="input" />
+      </Modal>
     </div>
   );
 };
