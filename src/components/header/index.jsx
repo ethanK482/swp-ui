@@ -22,6 +22,12 @@ const Header = () => {
             >
               Profile
             </Link>
+            <Link
+                      to="/update-password"
+                      className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white "
+                    >
+                      Update password
+                    </Link>
             <span
               onClick={()=> {
                 localStorage.clear("token");
