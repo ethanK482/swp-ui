@@ -1,4 +1,4 @@
-import {  useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Modal, notification } from 'antd';
 import { useEffect, useState } from "react";
@@ -11,7 +11,45 @@ const ProfileScreen = () => {
   const token = localStorage.getItem("token");
   const { data } = useUserInfo();
   const user = data?.data;
+  //update About
+  const changeAboutMutation = useMutation({
+    mutationFn: (body) => {
+      return api.post("/update-about", body, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
 
+  });
+
+  const showModalAbout = () => {
+    setIsModalAboutOpen(true);
+  };
+  const [isModalAboutOpen, setIsModalAboutOpen] = useState(false);
+  const [about, setAbout] = useState(user?.about);
+  useEffect(() => {
+    setName(user?.about)
+  }, [user])
+  const handleAboutOk = () => {
+    const body = { nabout: about };
+    changeAboutMutation.mutate(body, {
+      onSuccess() {
+        queryClient.invalidateQueries("PROFILE");
+        notification.success({ message: "Edit about successfully" })
+
+      }, onError() {
+        notification.success({ message: "Edit about failed, Try again later" })
+      }
+    })
+    setIsModalAboutOpen(false);
+  };
+
+  const handleAboutCancel = () => {
+    setIsModalAboutOpen(false);
+  };
+
+  //update Name
   const changeNameMutation = useMutation({
     mutationFn: (body) => {
       return api.post("/update-profile", body, {
@@ -74,7 +112,7 @@ const ProfileScreen = () => {
       onSuccess() {
         queryClient.invalidateQueries("PROFILE");
         notification.success({ message: "Update avatar successfully" })
-        
+
       }, onError() {
         notification.error({ message: "Update avatar failed" });
       }
@@ -210,22 +248,23 @@ const ProfileScreen = () => {
                     <div className="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold">
                       <i className="fas fa-envelope  mr-2 text-lg text-blueGray-400"></i>
 
-                     {user?.email}
+                      {user?.email}
                     </div>
                     <div className="text-blueGray-600">
                       <i className="fas fa-briefcase mr-2 text-lg text-blueGray-400" />
-                       {user?.role?.toUpperCase()}
+                      {user?.role?.toUpperCase()}
                     </div>
                   </div>
                   <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                     <div className="flex flex-wrap justify-center">
                       <div className="w-full lg:w-9/12 px-4">
                         <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
-                          An artist of considerable range, Jenna the name taken
-                          by Melbourne-raised, Brooklyn-based Nick Murphy
-                          writes, performs and records all of his own music,
-                          giving it a warm, intimate feel with a solid groove
-                          structure. An artist of considerable range.
+                          {user?.about}
+                          <button onClick={showModalAbout}>
+
+                            <EditOutlined />
+
+                          </button>
                         </p>
                         <a href="#pablo" className="font-normal text-pink-500">
                           Show more
@@ -275,6 +314,10 @@ const ProfileScreen = () => {
 
       <Modal title="Edit name" open={isModalNameOpen} onOk={handleNameOk} onCancel={handleNameCancel}>
         <input onChange={(e) => setName(e.target.value)} value={name} className="box-sizing: border-box" placeholder="New name" type="input" />
+      </Modal>
+
+      <Modal title="Edit About" open={isModalAboutOpen} onOk={handleAboutOk} onCancel={handleAboutCancel}>
+        <input onChange={(e) => setAbout(e.target.value)} value={about} className="box-sizing: border-box" placeholder="New About" type="input" />
       </Modal>
     </div>
   );
