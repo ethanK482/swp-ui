@@ -15,7 +15,7 @@ const ChangePassword = () => {
   const token = searchParams.get("token");
   const changePasswordMutation = useMutation({
     mutationFn: (body) => {
-      return api.post("change-password", body);
+      return api.patch("change-password", body);
     },
   });
 

@@ -9,7 +9,11 @@ const Header = () => {
       <div className="flex items-center items-center user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
-            <img src={user?.avatar_url} className="h-10 rounded-3xl" alt="Avatar" />
+            <img
+              src={user?.avatar_url}
+              className="h-10 rounded-3xl"
+              alt="Avatar"
+            />
             <span className="ml-3 text-white">{user.full_name}</span>
           </div>
           <div className="invisible rounded absolute z-50 flex w-full flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
@@ -19,25 +23,25 @@ const Header = () => {
             >
               Profile
             </Link>
-            <Link
-                      to="/update-password"
-                      className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white "
-                    >
-                      Update password
-                    </Link>
-            <span
-              onClick={()=> {
-                localStorage.clear("token");
-                navigate("/login")
-                window.location.reload();
+            {!user?.s_id && (
+              <Link
+                to="/update-password"
+                className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white "
+              >
+                Update password
+              </Link>
+            )}
 
+            <span
+              onClick={() => {
+                localStorage.clear("token");
+                navigate("/login");
+                window.location.reload();
               }}
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
             >
               Logout
             </span>
-          
-
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ const UpdatePassword = () => {
   const navigate = useNavigate();
   const updatePasswordMutation = useMutation({
     mutationFn: (body) => {
-      return api.post("update-password", body, {
+      return api.patch("update-password", body, {
         headers: {
           Authorization: token,
         },

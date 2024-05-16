@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
-import { Modal, notification } from 'antd';
+import {  Input, Modal, notification } from 'antd';
 import { useEffect, useState } from "react";
 import { Image } from 'antd';
 import { VerticalAlignTopOutlined, EditOutlined } from '@ant-design/icons';
 import Loading from "../../components/loading";
 import useUserInfo from "../../hook/user/useUserInfo";
+import TextArea from "antd/es/input/TextArea";
 const ProfileScreen = () => {
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
@@ -14,7 +15,7 @@ const ProfileScreen = () => {
   //update About
   const changeAboutMutation = useMutation({
     mutationFn: (body) => {
-      return api.post("/update-about", body, {
+      return api.patch("/update-about", body, {
         headers: {
           Authorization: token,
         },
@@ -28,9 +29,6 @@ const ProfileScreen = () => {
   };
   const [isModalAboutOpen, setIsModalAboutOpen] = useState(false);
   const [about, setAbout] = useState(user?.about);
-  useEffect(() => {
-    setName(user?.about)
-  }, [user])
   const handleAboutOk = () => {
     const body = { nabout: about };
     changeAboutMutation.mutate(body, {
@@ -52,7 +50,7 @@ const ProfileScreen = () => {
   //update Name
   const changeNameMutation = useMutation({
     mutationFn: (body) => {
-      return api.post("/update-profile", body, {
+      return api.patch("/update-profile", body, {
         headers: {
           Authorization: token,
         },
@@ -68,6 +66,7 @@ const ProfileScreen = () => {
   const [name, setName] = useState(user?.full_name);
   useEffect(() => {
     setName(user?.full_name)
+    setAbout(user?.about)
   }, [user])
   const handleNameOk = () => {
     const body = { nfull_name: name };
@@ -90,7 +89,7 @@ const ProfileScreen = () => {
   //show modal upload avatar
   const uploadAvatar = useMutation({
     mutationFn: (formData) => {
-      return api.post("/update-avatar", formData, {
+      return api.patch("/update-avatar", formData, {
         headers: { 'content-type': 'multipart/form-data', Authorization: token }
       });
     },
@@ -257,18 +256,16 @@ const ProfileScreen = () => {
                   </div>
                   <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
                     <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                      <div className="w-full lg:w-9/12 px-4 flex-col">
                         <p className="mb-4 text-lg leading-relaxed text-blueGray-700">
                           {user?.about}
-                          <button onClick={showModalAbout}>
-
+                        
+                        </p>
+                        <button className="ml-2 text-pink-500" onClick={showModalAbout}>
+                            Update about
                             <EditOutlined />
 
                           </button>
-                        </p>
-                        <a href="#pablo" className="font-normal text-pink-500">
-                          Show more
-                        </a>
                       </div>
                     </div>
                   </div>
@@ -313,11 +310,11 @@ const ProfileScreen = () => {
       </Modal>
 
       <Modal title="Edit name" open={isModalNameOpen} onOk={handleNameOk} onCancel={handleNameCancel}>
-        <input onChange={(e) => setName(e.target.value)} value={name} className="box-sizing: border-box" placeholder="New name" type="input" />
+        <Input onChange={(e) => setName(e.target.value)} value={name}  placeholder="New name"/>
       </Modal>
 
       <Modal title="Edit About" open={isModalAboutOpen} onOk={handleAboutOk} onCancel={handleAboutCancel}>
-        <input onChange={(e) => setAbout(e.target.value)} value={about} className="box-sizing: border-box" placeholder="New About" type="input" />
+        <TextArea  onChange={(e) => setAbout(e.target.value)} value={about} placeholder="Enter something about you" autoSize />
       </Modal>
     </div>
   );
