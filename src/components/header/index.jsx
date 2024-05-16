@@ -5,14 +5,11 @@ const Header = () => {
   const user = data?.data;
   const navigate = useNavigate();
   const renderAvatar = () => {
-    const userAvaUrl = user.avatar_url
-      ? user.avatar_url
-      : "https://t3.ftcdn.net/jpg/03/64/62/36/360_F_364623623_ERzQYfO4HHHyawYkJ16tREsizLyvcaeg.jpg";
     return (
       <div className="flex items-center items-center user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
-            <img src={userAvaUrl} className="h-10 rounded-3xl" alt="Avatar" />
+            <img src={user?.avatar_url} className="h-10 rounded-3xl" alt="Avatar" />
             <span className="ml-3 text-white">{user.full_name}</span>
           </div>
           <div className="invisible rounded absolute z-50 flex w-full flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">

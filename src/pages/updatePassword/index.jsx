@@ -2,6 +2,7 @@ import { Button, Form, Input, notification } from "antd";
 import ChangePasswordStyle from "../changePassword/ChangePassword.style.js";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/http";
+import { useNavigate } from "react-router-dom";
 const UpdatePassword = () => {
   const formItemLayout = {
     labelCol: {
@@ -9,6 +10,7 @@ const UpdatePassword = () => {
       sm: { span: 8 },
     },
   };
+  const navigate = useNavigate();
   const updatePasswordMutation = useMutation({
     mutationFn: (body) => {
       return api.post("update-password", body, {
@@ -24,11 +26,13 @@ const UpdatePassword = () => {
     const body = { oldPassword, newPassword };
     updatePasswordMutation.mutate(body, {
       onSuccess() {
+
         notification.success({ message: "Updated password successfully" });
+        navigate("/")
       },
-      onError() {
-        notification.success({
-          message: "Update password failed, Try again later",
+      onError(data) {
+        notification.error({
+          message: data.response.data.message 
         });
       },
     });
@@ -109,13 +113,20 @@ const UpdatePassword = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button
+              {updatePasswordMutation.isPending  ?  <Button
+                size="large"
+                loading
+                style={{ textAlign: "center" }}
+              >
+                Update
+              </Button> : <Button
                 size="large"
                 htmlType="submit"
                 style={{ textAlign: "center" }}
               >
                 Update
-              </Button>
+              </Button>}
+              
             </Form.Item>
           </Form>
         </div>

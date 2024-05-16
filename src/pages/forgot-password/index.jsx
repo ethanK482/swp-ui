@@ -18,7 +18,7 @@ function ForgotpasswordScreen() {
                 notification.success({ message: "Email is sent successfully" })
             },
             onError() {
-                notification.success({ message: "Email is sent failed" })
+                notification.error({ message: "Email is sent failed" })
             }
         })
     }

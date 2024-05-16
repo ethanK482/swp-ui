@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import axios from "axios";
 
 class Api {
@@ -5,15 +6,29 @@ class Api {
   constructor() {
     this.instance = axios.create({
       baseURL: "http://localhost:8080",
-      timeout: 10000,
+      timeout: 5000,
       headers: {
         "Content-Type": "application/json",
       },
     });
+    this.instance.interceptors.response.use(
+      (response) => {
+        if (response.config.url == "login" || response.config.url  ==="social") {
+          notification.success({message: "Login successfully"})
+          localStorage.setItem("token", response.data);
+          window.location.replace("/");
+        }
+        return response;
+      },
+      (error) => {
+        if (error.response.data.message === "expired_session") {
+          localStorage.removeItem("token");
+          window.location.replace("login");
+        }
+        return Promise.reject(error); 
+      }
+    );
   }
-
-
-
 }
 const api = new Api().instance;
 export default api;

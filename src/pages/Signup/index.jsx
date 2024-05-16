@@ -1,6 +1,6 @@
-import { Button, Checkbox, Form, Input, Radio, notification } from "antd";
+import { Button, Checkbox, Form, Input, notification } from "antd";
 import SignupStyle from "./Signup.style";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
@@ -9,6 +9,7 @@ import { useEffect } from "react";
 const clientGoogleId =
   "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
 const SignUpScreen = () => {
+  const queryClient = useQueryClient();
   useEffect(() => {
     gapi.load("client:auth2", () => {
       gapi.client.init({
@@ -56,14 +57,9 @@ const SignUpScreen = () => {
     socialLoginMutation.mutate(
       { name, sid, picture, email },
       {
-        onSuccess(data) {
-          localStorage.setItem("token", data.data);
-          notification.success({ message: "Login successfully"});
-          navigate(`/`);
+        onError() {
+          notification.success({ message: "Can't login with google" });
         },
-        onError(){
-          notification.success({ message: "Can't login with google"});
-        }
       }
     );
   };
