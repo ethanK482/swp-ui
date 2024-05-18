@@ -1,6 +1,8 @@
 import { useSearchParams } from "react-router-dom";
+import useProtectRoute from "../../hook/user/useProtectRoute";
 
 const VerifyNotification = ()=>{
+  useProtectRoute();
     const [searchParams] = useSearchParams();
     const userEmail  =searchParams.get('email');
     return (

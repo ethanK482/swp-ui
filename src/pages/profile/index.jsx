@@ -7,7 +7,9 @@ import { VerticalAlignTopOutlined, EditOutlined } from '@ant-design/icons';
 import Loading from "../../components/loading";
 import useUserInfo from "../../hook/user/useUserInfo";
 import TextArea from "antd/es/input/TextArea";
+import useAuthorRoute from "../../hook/user/useAuthorRoute";
 const ProfileScreen = () => {
+  useAuthorRoute()
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
   const { data } = useUserInfo();
@@ -203,7 +205,7 @@ const ProfileScreen = () => {
                       </div> */}
                     </div>
                     <div className="w-full lg:w-4/12 px-4 lg:order-1">
-                      <div className="flex justify-center py-4 lg:pt-4 pt-8">
+                      {/* <div className="flex justify-center py-4 lg:pt-4 pt-8">
                         <div className="mr-4 p-3 text-center">
                           <span className="text-xl font-bold block uppercase tracking-wide text-blueGray-600">
                             22
@@ -228,11 +230,11 @@ const ProfileScreen = () => {
                             Comments
                           </span>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   <div className="text-center mt-12">
-                    {changeNameMutation.isPending ? <Loading /> : <h3 className="text-4xl font-semibold leading-normal mb-2 text-blueGray-700 mb-2">
+                    {changeNameMutation.isPending ? <Loading /> : <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
                       {user?.full_name}
                       <button onClick={showModalName}>
 
@@ -277,23 +279,8 @@ const ProfileScreen = () => {
                 <div className="flex flex-wrap items-center md:justify-between justify-center">
                   <div className="w-full md:w-6/12 px-4 mx-auto text-center">
                     <div className="text-sm text-blueGray-500 font-semibold py-1">
-                      Made with{" "}
-                      <a
-                        href="https://www.creative-tim.com/product/notus-js"
-                        className="text-blueGray-500 hover:text-gray-800"
-                        target="_blank"
-                      >
-                        Notus JS
-                      </a>{" "}
-                      by{" "}
-                      <a
-                        href="https://www.creative-tim.com"
-                        className="text-blueGray-500 hover:text-blueGray-800"
-                        target="_blank"
-                      >
-                        Creative Tim
-                      </a>
-                      .
+                      SWP391 Project
+                   
                     </div>
                   </div>
                 </div>

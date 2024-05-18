@@ -6,7 +6,7 @@ const Header = () => {
   const navigate = useNavigate();
   const renderAvatar = () => {
     return (
-      <div className="flex items-center items-center user_avatar">
+      <div className="flex items-center  user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
             <img
@@ -16,7 +16,7 @@ const Header = () => {
             />
             <span className="ml-3 text-white">{user.full_name}</span>
           </div>
-          <div className="invisible rounded absolute z-50 flex w-full flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
+          <div className="invisible w-[160px] rounded absolute z-50 flex  flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
             <Link
               to={"/profile"}
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
@@ -26,7 +26,7 @@ const Header = () => {
             {!user?.s_id && (
               <Link
                 to="/update-password"
-                className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white "
+                className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white"
               >
                 Update password
               </Link>
@@ -65,20 +65,6 @@ const Header = () => {
             {user ? (
               renderAvatar()
             ) : (
-              //   <div>
-              //      <img
-              //   src={user.avatar_url}
-              //   className="mr-3 h-6 sm:h-9"
-              //   alt="Flowbite Logo"
-              // />
-              //     <Link
-              //     to="/profile"
-              //     className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              //   >
-              //     Profile
-              //   </Link>
-              //   </div>
-
               <>
                 <Link
                   to="/login"

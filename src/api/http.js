@@ -13,8 +13,10 @@ class Api {
     });
     this.instance.interceptors.response.use(
       (response) => {
-        if (response.config.url == "login" || response.config.url  ==="social") {
-          notification.success({message: "Login successfully"})
+        if (
+          response.config.url == "login" ||
+          response.config.url === "social"
+        ) {
           localStorage.setItem("token", response.data);
           window.location.replace("/");
         }
@@ -25,7 +27,7 @@ class Api {
           localStorage.removeItem("token");
           window.location.replace("login");
         }
-        return Promise.reject(error); 
+        return Promise.reject(error);
       }
     );
   }
