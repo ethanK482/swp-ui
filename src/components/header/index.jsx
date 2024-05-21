@@ -4,6 +4,7 @@ const Header = () => {
   const { data } = useUserInfo();
   const user = data?.data;
   const navigate = useNavigate();
+  const role = localStorage.getItem("role");
   const renderAvatar = () => {
     return (
       <div className="flex items-center  user_avatar">
@@ -23,6 +24,12 @@ const Header = () => {
             >
               Profile
             </Link>
+            {role === "admin" &&  <Link
+              to={"/dashboard"}
+              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
+            >
+               Dashboard
+            </Link>}
             {!user?.s_id && (
               <Link
                 to="/update-password"
@@ -31,6 +38,7 @@ const Header = () => {
                 Update password
               </Link>
             )}
+            
 
             <span
               onClick={() => {
