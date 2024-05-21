@@ -1,4 +1,3 @@
-import { notification } from "antd";
 import axios from "axios";
 
 class Api {
@@ -6,7 +5,7 @@ class Api {
   constructor() {
     this.instance = axios.create({
       baseURL: "http://localhost:8080",
-      timeout: 5000,
+      timeout: 10000,
       headers: {
         "Content-Type": "application/json",
       },
@@ -17,7 +16,8 @@ class Api {
           response.config.url == "login" ||
           response.config.url === "social"
         ) {
-          localStorage.setItem("token", response.data);
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("role", response.data.role);
           window.location.replace("/");
         }
         return response;
