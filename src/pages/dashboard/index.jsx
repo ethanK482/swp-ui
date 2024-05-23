@@ -5,7 +5,7 @@ import {
   MailOutlined,
   PieChartOutlined,
 } from "@ant-design/icons";
-import {  Menu } from "antd";
+import { Menu } from "antd";
 import DashboardStyle from "./Dashboard.style";
 const items = [
   { key: "1", icon: <PieChartOutlined />, label: "Option 1" },
@@ -56,18 +56,16 @@ const Dashboard = () => {
 
   return (
     <DashboardStyle>
- <div className="dashboard" style={{ width: 256 }}>
-     
-      <Menu
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
-        mode="inline"
-        theme="dark"
-        items={items}
-      />
-    </div>
+      <div className="dashboard" style={{ width: 256 }}>
+        <Menu
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          theme="dark"
+          items={items}
+        />
+      </div>
     </DashboardStyle>
-   
   );
 };
 export default Dashboard;

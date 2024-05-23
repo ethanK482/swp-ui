@@ -1,8 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import useUserInfo from "../../hook/user/useUserInfo";
 const Header = () => {
-  const { data } = useUserInfo();
-  const user = data?.data;
+  const user = useUserInfo();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const renderAvatar = () => {
@@ -15,7 +14,7 @@ const Header = () => {
               className="h-10 rounded-3xl"
               alt="Avatar"
             />
-            <span className="ml-3 text-white">{user.full_name}</span>
+            <span className="ml-3 text-white">{user?.full_name}</span>
           </div>
           <div className="invisible w-[160px] rounded absolute z-50 flex  flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
             <Link
@@ -29,6 +28,12 @@ const Header = () => {
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
             >
                Dashboard
+            </Link>}
+            {role === "expert" &&  <Link
+              to={"/expert"}
+              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
+            >
+               Course manage
             </Link>}
             {!user?.s_id && (
               <Link
