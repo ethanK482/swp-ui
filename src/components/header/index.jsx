@@ -24,11 +24,11 @@ const Header = () => {
             >
               Profile
             </Link>
-            {role === "admin" &&  <Link
+            {role === "admin" && <Link
               to={"/dashboard"}
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
             >
-               Dashboard
+              Dashboard
             </Link>}
             {!user?.s_id && (
               <Link
@@ -38,7 +38,7 @@ const Header = () => {
                 Update password
               </Link>
             )}
-            
+
 
             <span
               onClick={() => {
@@ -59,16 +59,26 @@ const Header = () => {
     <header className="fixed z-20 inset-x-0">
       <nav className=" border-gray-200 text-white px-4 lg:px-6 py-2.5 dark:bg-gray-800">
         <div className="flex  flex-wrap justify-between border-white items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
-            <img
-              src="https://flowbite.com/docs/images/logo.svg"
-              className="mr-3 h-6 sm:h-9"
-              alt="Flowbite Logo"
-            />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              FU Records
-            </span>
-          </a>
+          <div className="flex items-center  ">
+            <a href="/" className="flex items-center">
+              <img
+                src="https://flowbite.com/docs/images/logo.svg"
+                className="mr-3 h-6 sm:h-9"
+                alt="Flowbite Logo"
+              />
+              <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+                FU Records
+              </span>
+            </a>
+            <Link 
+              to="/document"
+              className="my-2 block text  py-1 text-xl  font-semibold text-gray-500 hover:text-white lg:px-6 "
+            >
+              Document
+            </Link>
+          </div>
+
+
           <div className="flex items-center lg:order-2">
             {user ? (
               renderAvatar()
