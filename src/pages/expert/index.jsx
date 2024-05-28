@@ -7,11 +7,11 @@ import { Menu } from "antd";
 import DashboardStyle from "../dashboard/Dashboard.style";
 import { useState } from "react";
 import CreateTab from "./tab/CreateTab";
+import ListCourseTab from "./tab/ListCourseTab";
 const items = [
   { key: "1", icon: <PieChartOutlined />, label: "Create course" },
   { key: "2", icon: <DesktopOutlined />, label: "List course" },
   { key: "3", icon: <ContainerOutlined />, label: "Statistics" },
-
 ];
 const ExpertDashboard = () => {
   const userRole = localStorage.getItem("role");
@@ -24,6 +24,8 @@ const ExpertDashboard = () => {
     switch (selectedKey) {
       case "1":
         return <CreateTab />;
+      case "2":
+        return <ListCourseTab />;
       default:
         return <div>Default Content</div>;
     }

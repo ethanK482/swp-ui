@@ -83,7 +83,7 @@ const CreateTab = () => {
   return (
     <div className="content">
       <div>
-        <h1>Create course</h1>
+        <h1 className="my-4">Create course</h1>
       </div>
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item name="name" label="Name" rules={[{ required: true }]}>
