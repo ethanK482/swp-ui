@@ -9,6 +9,10 @@ import ChangePassword from "../pages/changePassword";
 import ProfileScreen from "../pages/profile";
 import UpdatePassword from "../pages/updatePassword";
 import Dashboard from "../pages/dashboard";
+import ExpertDashboard from "../pages/expert";
+import CourseScreen from "../pages/courses";
+import CourseDetail from "../pages/CourseDetail";
+import PaymentResult from "../pages/paymentResult";
 const RouterManagement = () => {
   return (
     <Routes>
@@ -25,6 +29,11 @@ const RouterManagement = () => {
         <Route path="/profile" element={<ProfileScreen />}></Route>
         <Route path="/update-password" element={<UpdatePassword />}></Route>
         <Route path="/dashboard" element={<Dashboard />}></Route>
+        <Route path="/expert" element={<ExpertDashboard/>}></Route>
+        <Route path="/courses" element={<CourseScreen/>}></Route>
+        <Route path="/course/:id" element={<CourseDetail/>}></Route>
+        <Route path="/payment/result" element={<PaymentResult/>}></Route>
+        
         
       </Route>
     </Routes>

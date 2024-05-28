@@ -12,8 +12,7 @@ const ProfileScreen = () => {
   useAuthorRoute()
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
-  const { data } = useUserInfo();
-  const user = data?.data;
+  const user = useUserInfo();
   //update About
   const changeAboutMutation = useMutation({
     mutationFn: (body) => {

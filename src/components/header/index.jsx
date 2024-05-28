@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import useUserInfo from "../../hook/user/useUserInfo";
+import { Avatar } from "antd";
 const Header = () => {
-  const { data } = useUserInfo();
-  const user = data?.data;
+  const user = useUserInfo();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
   const renderAvatar = () => {
@@ -10,14 +10,11 @@ const Header = () => {
       <div className="flex items-center  user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
-            <img
-              src={user?.avatar_url}
-              className="h-10 rounded-3xl"
-              alt="Avatar"
-            />
-            <span className="ml-3 text-white">{user.full_name}</span>
+            <Avatar size={40}    src={user?.avatar_url}/>
+         
+            <span className="ml-3 text-black">{user?.full_name}</span>
           </div>
-          <div className="invisible w-[160px] rounded absolute z-50 flex  flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
+          <div className="invisible w-[160px]  rounded absolute z-50 flex  flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
             <Link
               to={"/profile"}
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
@@ -29,6 +26,12 @@ const Header = () => {
               className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
             >
                Dashboard
+            </Link>}
+            {role === "expert" &&  <Link
+              to={"/expert"}
+              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
+            >
+               Course manage
             </Link>}
             {!user?.s_id && (
               <Link
@@ -56,19 +59,24 @@ const Header = () => {
     );
   };
   return (
-    <header className="fixed z-20 inset-x-0">
-      <nav className=" border-gray-200 text-white px-4 lg:px-6 py-2.5 dark:bg-gray-800">
-        <div className="flex  flex-wrap justify-between border-white items-center mx-auto max-w-screen-xl">
-          <a href="/" className="flex items-center">
+    <header style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="fixed z-20 inset-x-0  border-2">
+      <nav className=" border-gray-200 bg-white text-black px-4 lg:px-6 py-2.5 ">
+        <div className="flex  flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+          <Link to="/" className="flex items-center">
             <img
               src="https://flowbite.com/docs/images/logo.svg"
               className="mr-3 h-6 sm:h-9"
               alt="Flowbite Logo"
             />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-black">
               FU Records
             </span>
-          </a>
+          </Link>
+          <Link to="/courses" className="flex items-center">
+            <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
+              Learning
+            </span>
+          </Link>
           <div className="flex items-center lg:order-2">
             {user ? (
               renderAvatar()
@@ -76,13 +84,13 @@ const Header = () => {
               <>
                 <Link
                   to="/login"
-                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  className=" text-black hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
                 >
                   Log in
                 </Link>
                 <Link
                   to="/register"
-                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  className=" text-black hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
                 >
                   Sign up
                 </Link>
