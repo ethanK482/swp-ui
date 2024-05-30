@@ -5,55 +5,18 @@ const Header = () => {
   const user = useUserInfo();
   const navigate = useNavigate();
   const role = localStorage.getItem("role");
+  const handleGoProfile = ()=>{
+    navigate("/profile")
+  }
   const renderAvatar = () => {
     return (
-      <div className="flex items-center  user_avatar">
+      <div onClick={handleGoProfile} className="flex items-center  user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
-            <Avatar size={40}    src={user?.avatar_url}/>
-         
-            <span className="ml-3 text-black">{user?.full_name}</span>
+            <Avatar size={40}    src={user?.avatarUrl}/>
+            <span className="ml-3 text-black">{user?.fullName}</span>
           </div>
-          <div className="invisible w-[160px]  rounded absolute z-50 flex  flex-col bg-[#1F2937] py-1 px-4 text-gray-800 shadow-xl group-hover:visible">
-            <Link
-              to={"/profile"}
-              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
-            >
-              Profile
-            </Link>
-            {role === "admin" &&  <Link
-              to={"/dashboard"}
-              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
-            >
-               Dashboard
-            </Link>}
-            {role === "expert" &&  <Link
-              to={"/expert"}
-              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
-            >
-               Course manage
-            </Link>}
-            {!user?.s_id && (
-              <Link
-                to="/update-password"
-                className="my-2 block border-b border-gray-100 py-1 text-sm  font-semibold text-gray-500 hover:text-white"
-              >
-                Update password
-              </Link>
-            )}
-            
-
-            <span
-              onClick={() => {
-                localStorage.clear("token");
-                navigate("/login");
-                window.location.reload();
-              }}
-              className="my-2 block border-b border-gray-100 py-1 font-semibold text-gray-500 hover:text-white "
-            >
-              Logout
-            </span>
-          </div>
+  
         </div>
       </div>
     );

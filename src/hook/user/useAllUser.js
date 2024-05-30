@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 
-const useAllExpert = () => {
+const useAllUser = () => {
   return useQuery({
-    queryKey: ["PUBLIC_EXPERT"],
+    queryKey: ["PUBLIC_USER"],
     queryFn: () =>
-      api.get("/public/experts"),
+      api.get("/public/users"),
   })?.data?.data;
 };
-export default useAllExpert;
+export default useAllUser;

@@ -6,12 +6,12 @@ import calculateRating from "../../../../helpers/CalculateRating";
 import { FaStar } from "react-icons/fa";
 const CourseCard = ({ course, expert }) => {
   const token = localStorage.getItem("token");
-  const { total, rate } = calculateRating(course?.reviews);
   const navigate = useNavigate();
   const handleClick = () => {
     if (!token) navigate("/login");
-    navigate(`/course/${course.id}` )
+    navigate(`/learn/${course.id}` )
   };
+  const { total, rate } = calculateRating(course?.reviews);
   return (
     <CourseCardStyle>
       <Card
@@ -32,7 +32,7 @@ const CourseCard = ({ course, expert }) => {
         }
       >
         <p className="course_name">{course.name} </p>
-        <p className="">{expert.fullName}</p>
+        <p className="">{expert?.fullName}</p>
         <div className="flex items-center mb-2">
               <div className="flex items-center">
                 {" "}
@@ -45,10 +45,7 @@ const CourseCard = ({ course, expert }) => {
                 ({total} ratings)
               </span>
             </div>
-        <div className="flex items-center text-black ">
-          <span className="mb-[4px]">đ</span>{" "}
-          <p className="  text-xl ">{course.price.toLocaleString("vi-VN")}</p>
-        </div>
+       
       </Card>
     </CourseCardStyle>
   );

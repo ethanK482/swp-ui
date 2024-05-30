@@ -4,14 +4,14 @@ import useAllTopic from "../../hook/topic/useAllTopic";
 import Search from "../../components/search";
 import { useEffect, useState } from "react";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
-import useAllExpert from "../../hook/user/useAllExpert";
+import useAllUser from "../../hook/user/useAllUser";
 const ITEM_DISPLAY = 9;
 const CourseScreen = () => {
   const [page, setPage] = useState(1);
   const onChangePage = (page) => {
     setPage(page);
   };
-  const experts = useAllExpert();
+  const experts = useAllUser();
   const findExpertById = (id)=>{
     return experts?.find(expert => expert.id == id);
   }

@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   Form,
-  Image,
   Input,
   Modal,
   Select,

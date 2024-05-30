@@ -64,13 +64,13 @@ const ProfileScreen = () => {
     setIsModalNameOpen(true);
   };
   const [isModalNameOpen, setIsModalNameOpen] = useState(false);
-  const [name, setName] = useState(user?.full_name);
+  const [name, setName] = useState(user?.fullName);
   useEffect(() => {
-    setName(user?.full_name)
+    setName(user?.fullName)
     setAbout(user?.about)
   }, [user])
   const handleNameOk = () => {
-    const body = { nfull_name: name };
+    const body = { nfullName: name };
     changeNameMutation.mutate(body, {
       onSuccess() {
         queryClient.invalidateQueries("PROFILE");
@@ -179,7 +179,7 @@ const ProfileScreen = () => {
                         {uploadAvatar.isPending ? <Loading /> : <>
                           <Image className="w-30 h-30 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500 "
                             width={200}
-                            src={user?.avatar_url}
+                            src={user?.avatarUrl}
                             alt="Avatar" />
 
 
@@ -234,7 +234,7 @@ const ProfileScreen = () => {
                   </div>
                   <div className="text-center mt-12">
                     {changeNameMutation.isPending ? <Loading /> : <h3 className="text-4xl font-semibold leading-normal text-blueGray-700 mb-2">
-                      {user?.full_name}
+                      {user?.fullName}
                       <button onClick={showModalName}>
 
                         <EditOutlined />

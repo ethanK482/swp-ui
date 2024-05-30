@@ -1,13 +1,15 @@
 import { Button, Card, Modal, notification } from "antd";
 import CourseDetailStyle from "./CourseDetailStyle";
-import ReactStars from "react-rating-stars-component";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
 import { useParams } from "react-router-dom";
-import useAllExpert from "../../hook/user/useAllExpert";
 import { useState } from "react";
 import VideoPlayer from "../expert/conponents/Video";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/http";
+import useAllUser from "../../hook/user/useAllUser";
+import CreateReview from "../newProfile/components/myLearning/CreateReview";
+import calculateRating from "../../helpers/CalculateRating";
+import { FaStar } from "react-icons/fa";
 const CourseDetail = () => {
   const { id } = useParams();
   const token = localStorage.getItem("token");
@@ -22,12 +24,13 @@ const CourseDetail = () => {
     },
   });
   const courses = useAllPublicCourse();
-  const experts = useAllExpert();
+  const experts = useAllUser();
   const course = courses?.find((course) => course.id == id);
   const expert = experts?.find((expert) => expert.id == course?.expertId);
   const [isView, setIsView] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   const preview = course?.lessons[0];
+  const { total, rate } = calculateRating(course?.reviews);
   const lessonItem = (course, i) => {
     if (i == 0) {
       return (
@@ -73,17 +76,21 @@ const CourseDetail = () => {
             </h1>
             <div className="flex items-center mb-2">
               {" "}
-              <span className="text-[#FFD700] font-bold mr-1">5</span>{" "}
-              <ReactStars value={5} edit={false} count={5} size={24} />
-              <span className="underline text-sky-400 cursor-pointer">
+              <div className="flex items-center">
                 {" "}
-                (800 ratings)
+                <p className="text-[#FFD700] font-bold mr-1">
+                  {rate?.toFixed(1)}
+                </p>{" "}
+                <FaStar className="text-[#FFD700] " />
+              </div>
+              <span className="underline text-white cursor-pointer">
+                ({total} ratings)
               </span>
             </div>
             <span className="text-white">Created by</span>{" "}
             <span className="underline text-sky-400 cursor-pointer">
               {" "}
-              {expert?.full_name}{" "}
+              {expert?.fullName}{" "}
             </span>
             <p className="text-white text-sm ">
               Last updated{" "}
@@ -136,6 +143,7 @@ const CourseDetail = () => {
             <h1>Description</h1>
             <p>{course?.description}</p>
           </div>
+          <CreateReview course={course} isShowCreate={false}/>
         </div>
         <Modal
           width={"80%"}
