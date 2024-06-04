@@ -4,7 +4,7 @@ const CourseCardStyle = styled.div`
   display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    -webkit-line-clamp: 2; /* Number of lines to show */
+    -webkit-line-clamp: 2;
     text-overflow: ellipsis;
     color: rgba(0, 0, 0, 0.88);
     font-weight: 600;

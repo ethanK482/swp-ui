@@ -39,7 +39,7 @@ const CourseScreen = () => {
   }, [courses, page, topicFilter, search]);
   return (
     <div className="min-h-[100vh] px-[50px]  ">
-      <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2">
+      <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2  ">
         <div className="flex justify-between bg-white items-center border-b">
           <div className="flex overflow-x-auto">
             <span

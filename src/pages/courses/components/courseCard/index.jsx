@@ -35,7 +35,6 @@ const CourseCard = ({ course, expert }) => {
         <p className="">{expert.fullName}</p>
         <div className="flex items-center mb-2">
               <div className="flex items-center">
-                {" "}
                 <p className="text-[#FFD700] font-bold mr-1">
                   {rate?.toFixed(1)}
                 </p>{" "}

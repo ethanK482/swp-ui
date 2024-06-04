@@ -8,7 +8,6 @@ const MainLayout = () => {
       <div className="pt-[60px]" >
       <Outlet />
       </div>
-    
       <Footer />
     </div>
   );

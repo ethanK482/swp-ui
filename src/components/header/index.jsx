@@ -4,7 +4,6 @@ import { Avatar } from "antd";
 const Header = () => {
   const user = useUserInfo();
   const navigate = useNavigate();
-  const role = localStorage.getItem("role");
   const handleGoProfile = ()=>{
     navigate("/profile")
   }
@@ -35,11 +34,28 @@ const Header = () => {
               FU Records
             </span>
           </Link>
+          <Link to="/forum" className="flex items-center">
+            <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
+              Forum
+            </span>
+          </Link>
+          <Link to="/flashcards" className="flex items-center">
+            <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
+              Flashcards
+            </span>
+          </Link>
+            <Link to="/documents" className="flex items-center">
+            <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
+              Documents
+            </span>
+          </Link>
           <Link to="/courses" className="flex items-center">
             <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
               Learning
             </span>
           </Link>
+        
+          
           <div className="flex items-center lg:order-2">
             {user ? (
               renderAvatar()

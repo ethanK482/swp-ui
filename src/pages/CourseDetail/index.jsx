@@ -10,7 +10,9 @@ import useAllUser from "../../hook/user/useAllUser";
 import CreateReview from "../newProfile/components/myLearning/CreateReview";
 import calculateRating from "../../helpers/CalculateRating";
 import { FaStar } from "react-icons/fa";
+import useAuthorRoute from "../../hook/user/useAuthorRoute";
 const CourseDetail = () => {
+  useAuthorRoute();
   const { id } = useParams();
   const token = localStorage.getItem("token");
   const buyMutation = useMutation({
