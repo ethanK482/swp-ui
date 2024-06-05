@@ -22,7 +22,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "./components/FlashCard";
-const ITEM_DISPLAY = 9;
+const ITEM_DISPLAY = 12;
 const FlashcardScreen = () => {
   const queryClient = useQueryClient();
   const [isViewModal, setIsViewModal] = useState(false);
@@ -171,7 +171,7 @@ const FlashcardScreen = () => {
                           { required: true, message: "Missing first question" },
                         ]}
                       >
-                        <Input placeholder="question" />
+                        <Input.TextArea placeholder="question" />
                       </Form.Item>
                       <Form.Item
                         {...restField}
@@ -180,7 +180,7 @@ const FlashcardScreen = () => {
                           { required: true, message: "Missing last answer" },
                         ]}
                       >
-                        <Input placeholder="Answer" />
+                        <Input.TextArea placeholder="Answer" />
                       </Form.Item>
                       <MinusCircleOutlined onClick={() => remove(name)} />
                     </Space>

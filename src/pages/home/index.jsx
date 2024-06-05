@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Col, Image, Row } from "antd";
 import useUserInfo from "../../hook/user/useUserInfo";
 import HomePageStyle from "./HomePageStyle";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
@@ -9,7 +9,7 @@ import DocumentCard from "../documents/components/DocumentCard";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "../flashcard/components/FlashCard";
 import { Link } from "react-router-dom";
-
+import banner from "../../assets/banner.png"
 const HomePage = () => {
   useUserInfo();
   const courses = useAllPublicCourse();
@@ -22,6 +22,7 @@ const HomePage = () => {
   return (
     <HomePageStyle>
       <div className="home-page">
+        {/* <Image preview={false} height={600} width={"100%"}   src={banner}/> */}
         <div className="p-5 relative">
           <p className="text-3xl font-bold">Courses</p>
           <Row gutter={[16, 40]} className="pt-[10px]">

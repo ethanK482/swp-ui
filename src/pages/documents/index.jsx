@@ -18,7 +18,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import DocumentCard from "./components/DocumentCard";
-const ITEM_DISPLAY = 9;
+const ITEM_DISPLAY = 12;
 const Document = () => {
   const queryClient = useQueryClient();
   const [isViewModal, setIsViewModal] = useState(false);
