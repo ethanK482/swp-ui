@@ -89,7 +89,7 @@ const SignUpScreen = () => {
             scrollToFirstError
           >
             <Form.Item
-              name="full_Name"
+              name="full_name"
               label="Full name"
               rules={[
                 {
