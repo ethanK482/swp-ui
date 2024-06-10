@@ -45,7 +45,7 @@ const FlashcardScreen = () => {
     let filteredFlashcards = flashcards;
     if (topicFilter) {
       filteredFlashcards = flashcards.filter(
-        (document) => document.topic_id == topicFilter
+        (document) => document.topicId == topicFilter
       );
     }
     if (search) {

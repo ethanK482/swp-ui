@@ -63,7 +63,7 @@ const FlashCardDetailScreen = () => {
   };
   const topics = useAllTopic();
   const topicName = topics?.find(
-    (i) => i.id == activeFlashcard?.topic_id
+    (i) => i.id == activeFlashcard?.topicId
   )?.name;
   return (
     <FlashcardDetailStyle>

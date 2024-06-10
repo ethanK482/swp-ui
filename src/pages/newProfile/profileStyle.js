@@ -17,7 +17,7 @@ const ProfileStyle = styled.div`
           position: relative; 
         }
         &_update{
-          bottom: 72%;
+          bottom: 74%;
           opacity: 0;
           border-radius: 10px;
           &:hover{

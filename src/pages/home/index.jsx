@@ -9,9 +9,9 @@ import DocumentCard from "../documents/components/DocumentCard";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "../flashcard/components/FlashCard";
 import { Link } from "react-router-dom";
-import banner from "../../assets/banner.png"
+import Landing from "../../components/LoginNeed";
 const HomePage = () => {
-  useUserInfo();
+  const user = useUserInfo();
   const courses = useAllPublicCourse();
   const experts = useAllUser();
   const documents = useAllDocuments();
@@ -21,6 +21,7 @@ const HomePage = () => {
   };
   return (
     <HomePageStyle>
+      {!user && <Landing/>}
       <div className="home-page">
         {/* <Image preview={false} height={600} width={"100%"}   src={banner}/> */}
         <div className="p-5 relative">

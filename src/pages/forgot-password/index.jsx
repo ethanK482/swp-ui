@@ -4,8 +4,9 @@ import { Button, Form, Input, notification } from 'antd';
 import ForgotPasswordStyle from './forgotpassword.style';
 import { useMutation } from '@tanstack/react-query';
 import api from '../../api/http';
+import { useNavigate } from 'react-router-dom';
 function ForgotpasswordScreen() {
-
+    const navigate = useNavigate();
     const forgotPasswordMutation = useMutation({ 
         mutationFn: (body) => {
             return api.post("reset-password", body);
@@ -15,6 +16,7 @@ function ForgotpasswordScreen() {
     const onSend = (body) => {
         forgotPasswordMutation.mutate(body, {
             onSuccess() {
+                navigate(`/verify?email=${body.email}`);
                 notification.success({ message: "Email is sent successfully" })
             },
             onError() {

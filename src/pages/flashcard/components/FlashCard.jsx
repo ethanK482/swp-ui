@@ -38,12 +38,11 @@ const FlashCard = ({ flashcard }) => {
           }
           description={
             <>
-             <p className="font-bold text-black">
-              {findUserById(flashcard.user_id)?.fullName}
-            </p>
-            <Tag>{flashcard.questions.length} cards</Tag>
+              <p className="font-bold text-black">
+                {findUserById(flashcard.userId)?.fullName}
+              </p>
+              <Tag>{flashcard.questions.length} cards</Tag>
             </>
-           
           }
         />
       </Card>
