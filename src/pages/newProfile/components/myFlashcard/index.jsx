@@ -11,7 +11,7 @@ const MyFlashCard = () => {
   );
   const numOfFlashcard = flashcards?.length;
   return (
-    numOfFlashcard &&
+    !!numOfFlashcard &&
     (flashcards ? (
       <MyLearningStyle>
         <div className="my-learning">

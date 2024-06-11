@@ -12,7 +12,7 @@ const MyLearning = () => {
   };
   const numOfCourseBought = courses?.length;
   return (
-    numOfCourseBought &&
+    !!numOfCourseBought &&
     (courses ? (
       <MyLearningStyle>
         <div className="my-learning">
