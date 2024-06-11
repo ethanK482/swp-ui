@@ -137,7 +137,7 @@ const ListCourseTab = () => {
           >
             Update information
           </Button>
-          <Button onClick={() => setCourse(course)} style={{ color: "blue" }}>
+          <Button onClick={() => setCourseUpdate(course)} style={{ color: "blue" }}>
             Detail
           </Button>
         </>
