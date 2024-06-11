@@ -8,8 +8,7 @@ const MyDocument = () => {
     const user = useUserInfo();
   const documents = useAllDocuments()?.filter(document => document.userId ==  user?.id);
   const numOfDocument = documents?.length;
-  return  numOfDocument 
-  && documents? (
+  return  numOfDocument && (documents? (
     <MyLearningStyle>
       <div  className="my-learning">
         <div className="my-learning_heading">
@@ -20,6 +19,6 @@ const MyDocument = () => {
         </div>
       </div>
     </MyLearningStyle>
-  ) : <Loading/> ;
+  ) : <Loading/>) ;
 };
 export default MyDocument;
