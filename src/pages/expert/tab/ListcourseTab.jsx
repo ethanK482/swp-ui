@@ -74,8 +74,9 @@ const ListCourseTab = () => {
   };
 
   const handleUpdateButton = (courseUpdate) => {
-    setIsModalAboutOpen(true);
     setCourseUpdate(courseUpdate);
+    setIsModalAboutOpen(true);
+    
   };
   const columns = [
     {
@@ -137,7 +138,7 @@ const ListCourseTab = () => {
           >
             Update information
           </Button>
-          <Button onClick={() => setCourseUpdate(course)} style={{ color: "blue" }}>
+          <Button onClick={() => setCourse(course)} style={{ color: "blue" }}>
             Detail
           </Button>
         </>
