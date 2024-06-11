@@ -4,7 +4,7 @@ class Api {
   constructor() {
     this.instance = axios.create({
       baseURL: "http://3.106.229.48:8080",
-      timeout: 20000,
+      timeout: 200000,
       headers: {
         "Content-Type": "application/json",
       },
