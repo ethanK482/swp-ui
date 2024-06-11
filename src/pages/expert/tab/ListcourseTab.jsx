@@ -57,6 +57,7 @@ const ListCourseTab = () => {
   const token = localStorage.getItem("token");
   const [isModalAboutOpen, setIsModalAboutOpen] = useState(false);
   const handleAboutCancel = () => {
+    setCourseUpdate(undefined)
     setIsModalAboutOpen(false);
   };
   const updateLesson = useMutation({
