@@ -66,7 +66,7 @@ const CreateTab = () => {
   const onFinish = (values) => {
     let formData = new FormData();
     formData.append("banner", bannerFileList[0]);
-    formData.append("files", lessonList);
+    formData.append("files", [...lessonList]);
     formData.append("topic_id", values.topic);
     formData.append("description", values.description);
     formData.append("price", values.price);
