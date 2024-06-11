@@ -3,7 +3,7 @@ import { useState } from "react";
 import useAllTopic from "../../../hook/topic/useAllTopic";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../../api/http";
-const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024
+const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const CreateTab = () => {
   const token = localStorage.getItem("token");
   const createCourse = useMutation({
@@ -66,7 +66,10 @@ const CreateTab = () => {
   const onFinish = (values) => {
     let formData = new FormData();
     formData.append("banner", bannerFileList[0]);
-    formData.append("files", [...lessonList]);
+    for (let i = 0; i < lessonList.length; i++) {
+      formData.append("files", lessonList[i]);
+    }
+
     formData.append("topic_id", values.topic);
     formData.append("description", values.description);
     formData.append("price", values.price);
