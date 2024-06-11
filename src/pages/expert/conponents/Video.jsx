@@ -10,7 +10,7 @@ const VideoPlayer = ({ lesson, isShowTitle=true, isNav=false }) => {
   }, [lesson]);
   return (
     <>
-      <video style={isNav ?  {maxWidth:"75%"} : {}} ref={videoRef} controls>
+      <video style={isNav ?  {maxWidth:"75%"} : {minWidth:"100%"}} ref={videoRef} controls>
         <source src={lesson?.video_url} type="video/mp4" />
         Your browser does not support the video tag.
       </video>

@@ -22,6 +22,7 @@ const ListCourseTab = () => {
   let courses = useAllExpertCourse();
   const [course, setCourse] = useState();
   const [courseUpdate, setCourseUpdate] = useState();
+  const [form] = Form.useForm();
   useEffect(() => {
     const newCourse = courses?.find((i) => i.id == course?.id);
     setCourse(newCourse);
@@ -57,8 +58,9 @@ const ListCourseTab = () => {
   const token = localStorage.getItem("token");
   const [isModalAboutOpen, setIsModalAboutOpen] = useState(false);
   const handleAboutCancel = () => {
-    setCourseUpdate(undefined)
+    form.resetFields();
     setIsModalAboutOpen(false);
+
   };
   const updateLesson = useMutation({
     mutationFn: (formData) => {
@@ -73,12 +75,16 @@ const ListCourseTab = () => {
   const getTopicName = (id) => {
     return topics.find((i) => i.id == id)?.name;
   };
-
-  const handleUpdateButton = (courseUpdate) => {
-    setCourseUpdate(courseUpdate);
+  const handleUpdateButton = (value) => {
+    setCourseUpdate(value);
     setIsModalAboutOpen(true);
     
   };
+  useEffect(() => {
+    if (courseUpdate) {
+      form.setFieldsValue(courseUpdate);
+    }
+  }, [courseUpdate, form]);
   const columns = [
     {
       title: "ID",
@@ -277,6 +283,7 @@ const ListCourseTab = () => {
         onCancel={handleAboutCancel}
       >
         <Form
+        form={form}
           onFinish={updateCourse}
           initialValues={courseUpdate}
           layout="vertical"
