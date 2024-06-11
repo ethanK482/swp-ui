@@ -5,18 +5,34 @@ import FlashcardDetailStyle from "./FlashcardDetailStyle";
 import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../../api/http";
-import { Tag } from "antd";
+import { Button, Form, Input, Modal, Select, Space, Tag, notification } from "antd";
 import useAllTopic from "../../../../hook/topic/useAllTopic";
 import getReviewStatus from "../../../../helpers/getReviewStatus";
 import useAuthorRoute from "../../../../hook/user/useAuthorRoute";
+import useUserInfo from "../../../../hook/user/useUserInfo";
+import {
+  PlusCircleOutlined,
+  MinusCircleOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
+import { useState } from "react";
 /* eslint-disable react/prop-types */
 const FlashCardDetailScreen = () => {
   useAuthorRoute();
+  const user = useUserInfo();
+  const topics = useAllTopic();
   const queryClient = useQueryClient();
   const { id } = useParams();
   const flashcards = useAllFlashCard();
   const activeFlashcard = flashcards?.find((flashcard) => flashcard.id == id);
   const token = localStorage.getItem("token");
+  const [isViewModal, setIsViewModal] = useState(false);
+  const topicOptions = () => {
+    return topics?.map((topic) => ({
+      value: topic.id +"",
+      label: <span>{topic.name}</span>,
+    }));
+  };
   const reviewMutation = useMutation({
     mutationFn: (body) => {
       return api.post("/flashcard/upload-review", body, {
@@ -30,6 +46,7 @@ const FlashCardDetailScreen = () => {
   const { totalHelpful, totalUnhelpful } = getReviewStatus(
     activeFlashcard?.reviews
   );
+  const isAuthor = activeFlashcard?.userId == user?.id;
   const renderCard = () => {
     const questions = activeFlashcard?.questions;
 
@@ -39,13 +56,17 @@ const FlashCardDetailScreen = () => {
         frontHTML: (
           <div className="h-[100%]  flex items-center justify-center bg-[#323639]   text-white rounded">
             {" "}
-            <span className="text-xl font-bold">{question.question}</span>
+            <span className="text-xl font-bold text-center">
+              {question.question}
+            </span>
           </div>
         ),
         backHTML: (
           <div className="h-[100%] flex items-center justify-center  bg-[#323639]   text-white  rounded">
             {" "}
-            <span className="text-xl font-bold">{question.answer}</span>
+            <span className="text-xl font-bold text-center">
+              {question.answer}
+            </span>
           </div>
         ),
       };
@@ -61,10 +82,28 @@ const FlashCardDetailScreen = () => {
       },
     });
   };
-  const topics = useAllTopic();
-  const topicName = topics?.find(
-    (i) => i.id == activeFlashcard?.topicId
-  )?.name;
+
+  const updateFlashCard = useMutation({
+    mutationFn: (formData) => {
+      return api.put(`/flashcard/update/${activeFlashcard?.id}`, formData, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+  });
+  const topicName = topics?.find((i) => i.id == activeFlashcard?.topicId)?.name;
+  const onSubmitUpdate = (body)=>{
+    updateFlashCard.mutate(body, {onSuccess(){
+      notification.success({message: "Successfully"})
+      queryClient.invalidateQueries("flashcards");
+      setIsViewModal(false)
+    },
+    onError(){
+      notification.success({message: "Failed"})
+    }
+  })
+  }
   return (
     <FlashcardDetailStyle>
       <div className="flashcard-detail  flex items-start justify-center mt-[100px] flashcard-detail">
@@ -89,6 +128,15 @@ const FlashCardDetailScreen = () => {
           >
             {totalUnhelpful}{" "}
           </Tag>
+          {isAuthor && (
+            <div
+              onClick={() => setIsViewModal(true)}
+              className="mt-3 p-2 w-[100px] rounded hover:bg-[#7F00FF] hover:text-[white]"
+            >
+              {" "}
+              <span className="mr-[3px]">Update</span> <PlusCircleOutlined />
+            </div>
+          )}
         </div>
         {activeFlashcard && <FlashcardArray cards={renderCard()} />}
       </div>
@@ -109,6 +157,88 @@ const FlashCardDetailScreen = () => {
               );
             })}
           </div>
+          <Modal
+        footer=""
+        title={`Update flashcards`}
+        open={isViewModal}
+        onCancel={() => setIsViewModal(false)}
+      >
+        <Form initialValues={activeFlashcard} onFinish={onSubmitUpdate} layout="vertical">
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input />
+          </Form.Item>
+
+          <Form.Item name="topicId" label="Topic" rules={[{ required: true }]}>
+            <Select placeholder="Select topic" options={topicOptions()} />
+          </Form.Item>
+          <>
+            <Form.List name="questions">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }) => (
+                    <Space
+                      key={key}
+                      style={{
+                        display: "flex",
+                        marginBottom: 8,
+                        justifyContent: "space-around",
+                      }}
+                      align="baseline"
+                    >
+                      <Form.Item
+                        {...restField}
+                        name={[name, "question"]}
+                        rules={[
+                          { required: true, message: "Missing first question" },
+                        ]}
+                      >
+                        <Input.TextArea placeholder="question" />
+                      </Form.Item>
+                      <Form.Item
+                        {...restField}
+                        name={[name, "answer"]}
+                        rules={[
+                          { required: true, message: "Missing last answer" },
+                        ]}
+                      >
+                        <Input.TextArea placeholder="Answer" />
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(name)} />
+                    </Space>
+                  ))}
+                  <Form.Item>
+                    <Button
+                      type="dashed"
+                      
+                      onClick={() => add()}
+                      block
+                      icon={<PlusOutlined />}
+                    >
+                      Add flashcard
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </>
+          <Form.Item
+            name="description"
+            label="Description"
+            rules={[{ required: true }]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item style={{ textAlign: "right" }}>
+            <Button
+              type="primary"
+              loading={updateFlashCard.isPending}
+              htmlType="submit"
+            >
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
         </div>
       )}
     </FlashcardDetailStyle>

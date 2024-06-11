@@ -5,6 +5,9 @@ const useAllDocuments = () => {
   return useQuery({
     queryKey: ["documents"],
     queryFn: () => api.get("/document/all"),
+    cacheTime: Infinity, 
+    staleTime: Infinity, 
+    refetchOnWindowFocus: false,
   })?.data?.data;
 };
 export default useAllDocuments;

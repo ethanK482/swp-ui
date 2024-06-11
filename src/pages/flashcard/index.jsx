@@ -22,6 +22,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "./components/FlashCard";
+import Loading from "../../components/loading";
 const ITEM_DISPLAY = 12;
 const FlashcardScreen = () => {
   const queryClient = useQueryClient();
@@ -80,8 +81,8 @@ const FlashcardScreen = () => {
       },
     });
   };
-
-  return (
+  const isDataReady = flashcards && topics;
+  return !isDataReady ? <Loading/> : (
     <>
       <div className="min-h-[100vh] px-[50px]  ">
         <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2">

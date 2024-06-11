@@ -2,10 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 
 const useAllPublicCourse = () => {
-  return useQuery({
+  const {data, isLoading } = useQuery({
     queryKey: ["PUBLIC_COURSE"],
-    queryFn: () =>
-      api.get("/public/courses"),
-  })?.data?.data;
+    queryFn: () => api.get("/public/courses"),
+    cacheTime: Infinity, 
+    staleTime: Infinity, 
+    refetchOnWindowFocus: false,
+  })
+  return {courses : data?.data, isLoading}
 };
 export default useAllPublicCourse;

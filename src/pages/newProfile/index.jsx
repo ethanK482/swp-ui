@@ -19,6 +19,9 @@ import api from "../../api/http";
 import { AppstoreOutlined, SettingOutlined } from "@ant-design/icons";
 import MyLearning from "./components/myLearning";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/loading";
+import MyFlashCard from "./components/myFlashcard";
+import MyDocument from "./components/myDocument";
 const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
@@ -178,7 +181,7 @@ const Profile = () => {
       ],
     },
   ];
-  return (
+  return !user ?  <Loading/> : (
     <ProfileStyle>
       <div className="profile">
         <div className="profile_avatar">
@@ -264,6 +267,8 @@ const Profile = () => {
         </div>
       </div>
       <MyLearning />
+      <MyFlashCard/>
+      <MyDocument/>
       <Modal
         title="Update avatar ?"
         open={isModalOpen}

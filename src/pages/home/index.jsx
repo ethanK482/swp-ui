@@ -1,4 +1,4 @@
-import { Col, Image, Row } from "antd";
+import { Col, Row } from "antd";
 import useUserInfo from "../../hook/user/useUserInfo";
 import HomePageStyle from "./HomePageStyle";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
@@ -10,20 +10,22 @@ import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "../flashcard/components/FlashCard";
 import { Link } from "react-router-dom";
 import Landing from "../../components/LoginNeed";
+import Loading from "../../components/loading";
 const HomePage = () => {
   const user = useUserInfo();
-  const courses = useAllPublicCourse();
+  const {courses} = useAllPublicCourse();
   const experts = useAllUser();
   const documents = useAllDocuments();
   const flashcards = useAllFlashCard();
   const findExpertById = (id) => {
     return experts?.find((expert) => expert.id == id);
   };
+  const isDataReady = courses && experts && documents && flashcards;
   return (
+    
     <HomePageStyle>
-      {!user && <Landing/>}
-      <div className="home-page">
-        {/* <Image preview={false} height={600} width={"100%"}   src={banner}/> */}
+      { isDataReady && !user && <Landing/>}
+      {!isDataReady ?<Loading/> : <div className="home-page">
         <div className="p-5 relative">
           <p className="text-3xl font-bold">Courses</p>
           <Row gutter={[16, 40]} className="pt-[10px]">
@@ -100,7 +102,8 @@ const HomePage = () => {
             View all &rarr;
           </Link>
         </div>
-      </div>
+      </div>}
+      
     </HomePageStyle>
   );
 };

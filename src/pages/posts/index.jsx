@@ -7,6 +7,7 @@ import api from "../../api/http";
 import useAllPost from "../../hook/posts/useAllPost";
 import useAllUser from "../../hook/user/useAllUser";
 import Post from "./components/post";
+import Loading from "../../components/loading";
 
 const PostScreen = () => {
   const queryClient = useQueryClient();
@@ -50,17 +51,18 @@ const PostScreen = () => {
     });
   };
   const [isViewModal, setIsViewModal] = useState(false);
-  return (
+  const isDataReady = posts  && allUsers;
+  return !isDataReady ? <Loading/> : (
     <PostScreenStyle>
       <div className="posts">
-        <div className="posts_heading">
+        {!!user && <div className="posts_heading">
           <Avatar size={50} src={user?.avatarUrl} />
           <Input
             onClick={() => setIsViewModal(true)}
             placeholder={`Hello ${user?.fullName}, do you have question to discuss ?`}
           />
           
-        </div>
+        </div>}
         <div className="posts_content mt-10">
             {posts?.map((post) => (
               <Post
@@ -71,7 +73,7 @@ const PostScreen = () => {
             ))}
           </div>
 
-        <Modal
+       {!!user && <Modal
           className="text-center"
           footer=""
           title={
@@ -93,12 +95,12 @@ const PostScreen = () => {
               />
             </Form.Item>
             <Form.Item style={{ textAlign: "right" }}>
-              <Button type="primary" htmlType="submit">
+              <Button loading={createPost.isPending} type="primary" htmlType="submit">
                 Create
               </Button>
             </Form.Item>
           </Form>
-        </Modal>
+        </Modal> }
       </div>
     </PostScreenStyle>
   );
