@@ -9,7 +9,7 @@ const Post = ({post, author})=>{
                 <Avatar size={40} src={author.avatarUrl}/>
                 <div>
                     <p>{author.fullName}</p>
-                    <span>{formatDate(new Date(post.created_at)) }</span>
+                    <span>{formatDate(new Date(post.createdAt)) }</span>
                 </div>
             </div>
             <div className="post_content">

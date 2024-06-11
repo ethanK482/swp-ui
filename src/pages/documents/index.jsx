@@ -18,6 +18,7 @@ import { PlusCircleOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import DocumentCard from "./components/DocumentCard";
+import Loading from "../../components/loading";
 const ITEM_DISPLAY = 12;
 const Document = () => {
   const queryClient = useQueryClient();
@@ -93,8 +94,8 @@ const Document = () => {
       },
     });
   };
-
-  return (
+  const isDataReady = documents && topics;
+  return !isDataReady ? <Loading/> :  (
     <DocumentStyle>
       <div className="min-h-[100vh] px-[50px]  ">
         <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2">

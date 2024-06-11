@@ -11,6 +11,9 @@ const useAllExpertCourse = () => {
           Authorization: token,
         },
       }),
+      cacheTime: Infinity, 
+    staleTime: Infinity, 
+    refetchOnWindowFocus: false,
   })?.data?.data;
 };
 export default useAllExpertCourse;

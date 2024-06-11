@@ -9,6 +9,9 @@ const useAllBoughtCourse = () => {
       api.get("/course/bought", { headers: {
         Authorization: token,
       },}),
+      cacheTime: Infinity, 
+    staleTime: Infinity, 
+    refetchOnWindowFocus: false,
   })?.data?.data;
 };
 export default useAllBoughtCourse;

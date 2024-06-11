@@ -43,6 +43,7 @@ const CreateReview = ({ course, isShowCreate=true }) => {
       {
         onSuccess() {
           queryClient.invalidateQueries("BOUGHT_COURSE");
+          queryClient.invalidateQueries("PUBLIC_COURSE");
           setShowSave(false);
           notification.success({ message: "Review successfully" });
         },

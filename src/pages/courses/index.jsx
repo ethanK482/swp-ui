@@ -5,6 +5,7 @@ import Search from "../../components/search";
 import { useEffect, useState } from "react";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
 import useAllUser from "../../hook/user/useAllUser";
+import Loading from "../../components/loading";
 const ITEM_DISPLAY = 9;
 const CourseScreen = () => {
   const [page, setPage] = useState(1);
@@ -15,7 +16,7 @@ const CourseScreen = () => {
   const findExpertById = (id)=>{
     return experts?.find(expert => expert.id == id);
   }
-  const courses = useAllPublicCourse();
+  const {courses} = useAllPublicCourse();
   const topics = useAllTopic();
   const [topicFilter, setTopicFilter] = useState();
   const [search, setSearch] = useState("");
@@ -37,7 +38,8 @@ const CourseScreen = () => {
     const endIndex = startIndex + ITEM_DISPLAY;
     setDisplayCourses(filteredCourses?.slice(startIndex, endIndex));
   }, [courses, page, topicFilter, search]);
-  return (
+  const isDataReady = experts && courses && topics;
+  return !isDataReady ?  <Loading/> : (
     <div className="min-h-[100vh] px-[50px]  ">
       <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2  ">
         <div className="flex justify-between bg-white items-center border-b">

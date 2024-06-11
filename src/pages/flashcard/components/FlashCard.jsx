@@ -7,7 +7,6 @@ import useAllUser from "../../../hook/user/useAllUser";
 import Meta from "antd/es/card/Meta";
 import DocumentCardStyle from "../../documents/DocumentCard.style";
 const FlashCard = ({ flashcard }) => {
-  console.log(flashcard);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const handleViewDocument = () => {

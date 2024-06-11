@@ -25,7 +25,7 @@ const CourseDetail = () => {
       });
     },
   });
-  const courses = useAllPublicCourse();
+  const {courses} = useAllPublicCourse();
   const experts = useAllUser();
   const course = courses?.find((course) => course.id == id);
   const expert = experts?.find((expert) => expert.id == course?.expertId);

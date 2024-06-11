@@ -10,7 +10,8 @@ import useProtectRoute from "../../hook/user/useProtectRoute";
 const clientGoogleId =
   "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
 const SignUpScreen = () => {
-  useProtectRoute()
+  useProtectRoute();
+  const queryClient = useQueryClient();
   useEffect(() => {
     gapi.load("client:auth2", () => {
       gapi.client.init({
@@ -42,6 +43,7 @@ const SignUpScreen = () => {
       onSuccess(data) {
         navigate(`/verify?email=${data.data.email}`);
         notification.success({ message: "Register successfully" });
+        queryClient.invalidateQueries("PUBLIC_USER");
       },
       onError(data) {
         notification.error({ message: data.response.data.message });

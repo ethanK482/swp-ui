@@ -1,3 +1,4 @@
+import Loading from "../../../../components/loading";
 import useAllBoughtCourse from "../../../../hook/course/useAllBoughtCourse";
 import useAllExpert from "../../../../hook/user/useAllUser";
 import CourseCard from "./CourseCard";
@@ -9,7 +10,9 @@ const MyLearning = () => {
   const findExpertById = (id) => {
     return experts?.find((expert) => expert.id == id);
   };
-  return (
+  const numOfCourseBought = courses?.length;
+  return  numOfCourseBought 
+  && courses? (
     <MyLearningStyle>
       <div  className="my-learning">
         <div className="my-learning_heading">
@@ -20,6 +23,6 @@ const MyLearning = () => {
         </div>
       </div>
     </MyLearningStyle>
-  );
+  ) : <Loading/> ;
 };
 export default MyLearning;
