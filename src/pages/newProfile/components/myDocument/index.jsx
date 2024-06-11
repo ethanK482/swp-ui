@@ -12,7 +12,7 @@ const MyDocument = () => {
     <MyLearningStyle>
       <div  className="my-learning">
         <div className="my-learning_heading">
-          <p className="my-learning_heading__title">My Flashcard</p>
+          <p className="my-learning_heading__title">My Documents</p>
         </div>
         <div className="my-learning_courses">
         {documents?.map(document => <DocumentCard key={document} document={document}/>)}

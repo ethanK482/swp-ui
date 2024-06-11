@@ -1,11 +1,12 @@
 import { Button, Form, Input, Select, notification } from "antd";
 import { useState } from "react";
 import useAllTopic from "../../../hook/topic/useAllTopic";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../api/http";
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const CreateTab = () => {
   const token = localStorage.getItem("token");
+  const queryClient = useQueryClient();
   const createCourse = useMutation({
     mutationFn: (formData) => {
       return api.post("/expert/course", formData, {
@@ -76,6 +77,7 @@ const CreateTab = () => {
     formData.append("name", values.name);
     createCourse.mutate(formData, {
       onSuccess() {
+        queryClient.invalidateQueries("EXPERT_COURSE");
         notification.success({ message: "Created successfully" });
       },
       onError(data) {
