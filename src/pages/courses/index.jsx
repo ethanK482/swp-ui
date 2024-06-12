@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import useAllPublicCourse from "../../hook/course/useAllUserCourse";
 import useAllUser from "../../hook/user/useAllUser";
 import Loading from "../../components/loading";
-const ITEM_DISPLAY = 9;
+const ITEM_DISPLAY = 12;
 const CourseScreen = () => {
   const [page, setPage] = useState(1);
   const onChangePage = (page) => {
