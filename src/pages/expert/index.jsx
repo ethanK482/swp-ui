@@ -14,8 +14,6 @@ const items = [
   { key: "3", icon: <ContainerOutlined />, label: "Statistics" },
 ];
 const ExpertDashboard = () => {
-  const userRole = localStorage.getItem("role");
-  if (userRole !== "expert") window.location.replace("/");
   const [selectedKey, setSelectedKey] = useState("1");
   const handleClick = (e) => {
     setSelectedKey(e.key);

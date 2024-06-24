@@ -3,9 +3,7 @@ import ChangePasswordStyle from "../changePassword/ChangePassword.style.js";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/http";
 import { useNavigate } from "react-router-dom";
-import useAuthorRoute from "../../hook/user/useAuthorRoute.js";
 const UpdatePassword = () => {
-  useAuthorRoute();
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },

@@ -8,10 +8,10 @@ import useAllTopic from "../../../../hook/topic/useAllTopic";
 import { Tag } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../../api/http";
-import useAuthorRoute from "../../../../hook/user/useAuthorRoute";
+import { loginRequire } from "../../../../common/protectRoute";
 
 const DocumentDetail = () => {
-  useAuthorRoute();
+  loginRequire()
   const queryClient = useQueryClient();
   const { id } = useParams();
   const documents = useAllDocuments();
