@@ -132,7 +132,7 @@ const Profile = () => {
   };
   const getManagement = () => {
     switch (role) {
-      case "admin": {
+      case ADMIN: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,
@@ -140,7 +140,7 @@ const Profile = () => {
           children: [{ key: "dashboard", label: "Admin Dashboard" }],
         };
       }
-      case "expert": {
+      case EXPERT: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,

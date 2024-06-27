@@ -23,7 +23,7 @@ const CourseDetail = () => {
       });
     },
   });
-  const {courses} = useAllPublicCourse();
+  const { courses } = useAllPublicCourse();
   const experts = useAllUser();
   const course = courses?.find((course) => course.id == id);
   const expert = experts?.find((expert) => expert.id == course?.expertId);
@@ -61,9 +61,9 @@ const CourseDetail = () => {
       onSuccess(data) {
         window.location.replace(data.data);
       },
-      onError(data){
-        notification.error({message: data.response.data.message })
-      }
+      onError(data) {
+        notification.error({ message: data.response.data.message });
+      },
     });
   };
   return (
@@ -143,7 +143,7 @@ const CourseDetail = () => {
             <h1>Description</h1>
             <p>{course?.description}</p>
           </div>
-          <CreateReview course={course} isShowCreate={false}/>
+          <CreateReview course={course} isShowCreate={false} />
         </div>
         <Modal
           width={"80%"}
@@ -156,7 +156,7 @@ const CourseDetail = () => {
         </Modal>
 
         <Modal
-        confirmLoading={buyMutation.isPending}
+          confirmLoading={buyMutation.isPending}
           title={`Are you sure to buy  "${course?.name}"`}
           open={isShowConfirm}
           onCancel={() => setIsShowConfirm(false)}

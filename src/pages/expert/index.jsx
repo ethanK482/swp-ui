@@ -11,7 +11,6 @@ import ListCourseTab from "./tab/ListcourseTab.jsx";
 const items = [
   { key: "1", icon: <PieChartOutlined />, label: "Create course" },
   { key: "2", icon: <DesktopOutlined />, label: "List course" },
-  { key: "3", icon: <ContainerOutlined />, label: "Statistics" },
 ];
 const ExpertDashboard = () => {
   const [selectedKey, setSelectedKey] = useState("1");
