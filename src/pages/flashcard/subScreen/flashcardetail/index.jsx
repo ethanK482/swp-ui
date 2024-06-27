@@ -5,10 +5,18 @@ import FlashcardDetailStyle from "./FlashcardDetailStyle";
 import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../../api/http";
-import { Button, Form, Input, Modal, Select, Space, Tag, notification } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Tag,
+  notification,
+} from "antd";
 import useAllTopic from "../../../../hook/topic/useAllTopic";
 import getReviewStatus from "../../../../helpers/getReviewStatus";
-import useAuthorRoute from "../../../../hook/user/useAuthorRoute";
 import useUserInfo from "../../../../hook/user/useUserInfo";
 import Report from "../../../../components/report";
 
@@ -18,9 +26,10 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
+import { loginRequire } from "../../../../common/protectRoute";
 /* eslint-disable react/prop-types */
 const FlashCardDetailScreen = () => {
-  useAuthorRoute();
+  loginRequire();
   const user = useUserInfo();
   const topics = useAllTopic();
   const queryClient = useQueryClient();
@@ -98,15 +107,16 @@ const FlashCardDetailScreen = () => {
   const onSubmitUpdate = (body) => {
     updateFlashCard.mutate(body, {
       onSuccess() {
-        notification.success({ message: "Successfully" })
+
+        notification.success({ message: "Successfully" });
         queryClient.invalidateQueries("flashcards");
-        setIsViewModal(false)
+        setIsViewModal(false);
       },
       onError() {
-        notification.success({ message: "Failed" })
-      }
-    })
-  }
+        notification.success({ message: "Failed" });
+      },
+    });
+  };
   return (
     <FlashcardDetailStyle>
       <div className="flashcard-detail  flex items-start justify-center mt-[100px] flashcard-detail">
@@ -173,12 +183,22 @@ const FlashCardDetailScreen = () => {
             open={isViewModal}
             onCancel={() => setIsViewModal(false)}
           >
-            <Form initialValues={activeFlashcard} onFinish={onSubmitUpdate} layout="vertical">
+
+            <Form
+              initialValues={activeFlashcard}
+              onFinish={onSubmitUpdate}
+              layout="vertical"
+            >
               <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
 
-              <Form.Item name="topicId" label="Topic" rules={[{ required: true }]}>
+
+              <Form.Item
+                name="topicId"
+                label="Topic"
+                rules={[{ required: true }]}
+              >
                 <Select placeholder="Select topic" options={topicOptions()} />
               </Form.Item>
               <>
@@ -199,7 +219,11 @@ const FlashCardDetailScreen = () => {
                             {...restField}
                             name={[name, "question"]}
                             rules={[
-                              { required: true, message: "Missing first question" },
+
+                              {
+                                required: true,
+                                message: "Missing first question",
+                              },
                             ]}
                           >
                             <Input.TextArea placeholder="question" />
@@ -208,7 +232,12 @@ const FlashCardDetailScreen = () => {
                             {...restField}
                             name={[name, "answer"]}
                             rules={[
-                              { required: true, message: "Missing last answer" },
+
+                              {
+                                required: true,
+                                message: "Missing last answer",
+                              },
+
                             ]}
                           >
                             <Input.TextArea placeholder="Answer" />
@@ -219,7 +248,6 @@ const FlashCardDetailScreen = () => {
                       <Form.Item>
                         <Button
                           type="dashed"
-
                           onClick={() => add()}
                           block
                           icon={<PlusOutlined />}

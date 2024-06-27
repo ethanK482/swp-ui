@@ -16,13 +16,18 @@ import { useEffect, useState } from "react";
 import VideoPlayer from "../conponents/Video";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../api/http";
+import useAllStudent from "../../../hook/course/useAllStudent";
+import formatDate from "../../../helpers/formatDate";
+import { PlusCircleOutlined } from "@ant-design/icons";
 const MAX_FILE_SIZE_BYTES = 20 * 1024 * 1024;
 const ListCourseTab = () => {
   const queryClient = useQueryClient();
+  const [isViewLessonModal, setIsViewLessonModal] = useState(false);
   let courses = useAllExpertCourse();
   const [course, setCourse] = useState();
   const [courseUpdate, setCourseUpdate] = useState();
   const [form] = Form.useForm();
+  const { data: studentsData, isLoading } = useAllStudent(course?.id);
   useEffect(() => {
     const newCourse = courses?.find((i) => i.id == course?.id);
     setCourse(newCourse);
@@ -35,6 +40,7 @@ const ListCourseTab = () => {
     }));
   };
   const [bannerFileList, setBannerFileList] = useState();
+  const [lessonList, setLessonList] = useState();
   const updateCourseMutation = useMutation({
     mutationFn: ({ formData, id }) => {
       return api.put(`/expert/course/${id}`, formData, {
@@ -45,14 +51,72 @@ const ListCourseTab = () => {
       });
     },
   });
+
+  const addLessonMutation = useMutation({
+    mutationFn: ({ formData, id }) => {
+      return api.post(`/expert/add/lesson/${id}`, formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+      });
+    },
+  });
+
+  const onFinishAddLesson = () => {
+    let formData = new FormData();
+    for (let i = 0; i < lessonList.length; i++) {
+      formData.append("files", lessonList[i]);
+    }
+    addLessonMutation.mutate(
+      { formData, id: course?.id },
+      {
+        onSuccess() {
+          queryClient.invalidateQueries("EXPERT_COURSE");
+          notification.success({ message: "update successfully" });
+          setIsViewLessonModal(false);
+        },
+        onError(data) {
+          notification.success({ message: data.response.data.message });
+        },
+      }
+    );
+  };
   const handleChangeBanner = (info) => {
     const file = info.files[0];
     if (!file.type.includes("image")) {
-      notification.error({ message: "Banner must be an image" });
+      notification.error({ message: "Banner must be an mp4 video" });
       setBannerFileList(null);
     } else {
       setBannerFileList(info.files);
     }
+  };
+
+  const handleChangeLessons = (info) => {
+    const regex = /^\d+-[^.]+\.mp4$/;
+    const list = info.files;
+    for (let i = 0; i < list.length; i++) {
+      if (!list[i].type.includes("video")) {
+        notification.error({ message: "Lesson must be an image" });
+        setLessonList(null);
+        return;
+      }
+      if (!regex.test(list[i].name)) {
+        notification.error({
+          message: "Please follow platform format <order>-<filename.mp4> ",
+        });
+        setLessonList(null);
+        return;
+      }
+      if (list[i].size > MAX_FILE_SIZE_BYTES) {
+        notification.error({
+          message: "Maximum is 20MB ",
+        });
+        setLessonList(null);
+        return;
+      }
+    }
+    setLessonList(list);
   };
   const [idUpdate, setIdUpdate] = useState();
   const token = localStorage.getItem("token");
@@ -60,7 +124,6 @@ const ListCourseTab = () => {
   const handleAboutCancel = () => {
     form.resetFields();
     setIsModalAboutOpen(false);
-
   };
   const updateLesson = useMutation({
     mutationFn: (formData) => {
@@ -78,7 +141,6 @@ const ListCourseTab = () => {
   const handleUpdateButton = (value) => {
     setCourseUpdate(value);
     setIsModalAboutOpen(true);
-    
   };
   useEffect(() => {
     if (courseUpdate) {
@@ -191,27 +253,53 @@ const ListCourseTab = () => {
     });
   };
   const renderCourseDetail = () => {
+    const columns = [
+      {
+        title: "Student",
+        dataIndex: "student",
+      },
+      {
+        title: "Join At",
+        dataIndex: "jointAt",
+      },
+    ];
+    const dataSource = studentsData?.data?.map((student) => ({
+      student: (
+        <div>
+          <Avatar src={student.avatarUrl} />
+          <span className="ml-2">{student.fullName}</span>
+        </div>
+      ),
+      jointAt: formatDate(new Date(student.joinAt)),
+    }));
     return (
       <div className="flex flex-col">
-        <Button
-          onClick={() => setCourse(null)}
-          className="w-[150px] mt-4 mb-3  text-white bg-[#7F00FF]"
-        >
-          &larr; Back
-        </Button>
+        <div className="flex justify-between w-full items-center">
+          <Button
+            onClick={() => setCourse(null)}
+            className="w-[150px] mt-4 mb-3  text-white bg-[#7F00FF]"
+          >
+            &larr; Back
+          </Button>
+          <div
+            onClick={() => setIsViewLessonModal(true)}
+            className="mr-5 p-2 rounded hover:bg-[#7F00FF] hover:text-[white]"
+          >
+            {" "}
+            <span className="mr-[3px]">Add Lesson</span> <PlusCircleOutlined />
+          </div>
+        </div>
 
         <Card
           className="text-left"
           title={
-            <div  className="flex items-center justify-between">
+            <div className="flex items-center justify-between">
               <span className="text-[25px]">{course.name}</span>{" "}
-              <div> <Tag   color={ "green"}>
-               {course?.totalUserBuy} Student
-              </Tag>
-            <Tag color={"gold" }>
-            Make {course?.income} VND
-              </Tag></div>
-             
+              <div>
+                {" "}
+                <Tag color={"green"}>{course?.totalUserBuy} Student</Tag>
+                <Tag color={"gold"}>Make {course?.income} VND</Tag>
+              </div>
             </div>
           }
         >
@@ -239,6 +327,13 @@ const ListCourseTab = () => {
             </Card.Grid>
           ))}
         </Card>
+        <Table
+          title={() => <span className="text-xl font-bold">Student List</span>}
+          loading={isLoading}
+          columns={columns}
+          dataSource={dataSource}
+          bordered
+        />
       </div>
     );
   };
@@ -283,7 +378,7 @@ const ListCourseTab = () => {
         onCancel={handleAboutCancel}
       >
         <Form
-        form={form}
+          form={form}
           onFinish={updateCourse}
           initialValues={courseUpdate}
           layout="vertical"
@@ -324,6 +419,32 @@ const ListCourseTab = () => {
                 Update
               </Button>
             )}
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        footer=""
+        title={`Add a lesson`}
+        open={isViewLessonModal}
+        onCancel={() => setIsViewLessonModal(false)}
+      >
+        <Form onFinish={onFinishAddLesson} layout="vertical">
+          <Form.Item label="Document file" rules={[{ required: true }]}>
+            <input
+              multiple
+              onChange={(e) => handleChangeLessons(e.target)}
+              type="file"
+            />
+          </Form.Item>
+          <Form.Item style={{ textAlign: "right" }}>
+            <Button
+              loading={addLessonMutation.isPending}
+              type="primary"
+              htmlType="submit"
+            >
+              Upload
+            </Button>
           </Form.Item>
         </Form>
       </Modal>

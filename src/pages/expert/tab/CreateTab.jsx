@@ -34,7 +34,7 @@ const CreateTab = () => {
     const list = info.files;
     for (let i = 0; i < list.length; i++) {
       if (!list[i].type.includes("video")) {
-        notification.error({ message: "Lesson must be an image" });
+        notification.error({ message: "Lesson must be an mp4 video" });
         setLessonList(null);
         return;
       }

@@ -6,12 +6,10 @@ import { gapi } from "gapi-script";
 import { useEffect } from "react";
 import SigninStyle from "./Signin.style";
 import api from "../../api/http";
-import useProtectRoute from "../../hook/user/useProtectRoute";
 const clientGoogleId =
   "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
 const SignInScreen = () => {
   const navigate = useNavigate();
-  useProtectRoute()
   useEffect(() => {
     gapi.load("client:auth2", () => {
       gapi.client.init({
@@ -151,7 +149,7 @@ const SignInScreen = () => {
               )}
             </Form.Item>
             <Form.Item>
-              <span>You don't have account? </span>{" "}
+              <span>You don not have account? </span>{" "}
               <Link style={{ color: "blue" }} to={"/register"}>
                 Sign up
               </Link>

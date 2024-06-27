@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 import MyFlashCard from "./components/myFlashcard";
 import MyDocument from "./components/myDocument";
+import { ADMIN, EXPERT, USER } from "../../common/constants";
 const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
@@ -131,7 +132,7 @@ const Profile = () => {
   };
   const getManagement = () => {
     switch (role) {
-      case "admin": {
+      case ADMIN: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,
@@ -139,7 +140,7 @@ const Profile = () => {
           children: [{ key: "dashboard", label: "Admin Dashboard" }],
         };
       }
-      case "expert": {
+      case EXPERT: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,
@@ -157,13 +158,13 @@ const Profile = () => {
   };
   const getRoleTag = () => {
     switch (role) {
-      case "admin": {
+      case ADMIN: {
         return <Tag color="gold">ADMIN</Tag>;
       }
-      case "expert": {
+      case EXPERT: {
         return <Tag color="purple">EXPERT</Tag>;
       }
-      case "user": {
+      case USER: {
         return <Tag color="green">USER</Tag>;
       }
     }
@@ -181,7 +182,9 @@ const Profile = () => {
       ],
     },
   ];
-  return !user ?  <Loading/> : (
+  return !user ? (
+    <Loading />
+  ) : (
     <ProfileStyle>
       <div className="profile">
         <div className="profile_avatar">
@@ -203,7 +206,10 @@ const Profile = () => {
             </span>
             <p>{user?.fullName}</p>
           </div>
-            <div> {getRoleTag() } {getLegitMarkTag(user?.legitMark)}</div>
+          <div>
+            {" "}
+            {getRoleTag()} {getLegitMarkTag(user?.legitMark)}
+          </div>
           <div>
             <Menu
               onClick={menuOnclick}
@@ -267,8 +273,8 @@ const Profile = () => {
         </div>
       </div>
       <MyLearning />
-      <MyFlashCard/>
-      <MyDocument/>
+      <MyFlashCard />
+      <MyDocument />
       <Modal
         title="Update avatar ?"
         open={isModalOpen}
