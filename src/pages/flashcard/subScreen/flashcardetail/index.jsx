@@ -18,6 +18,8 @@ import {
 import useAllTopic from "../../../../hook/topic/useAllTopic";
 import getReviewStatus from "../../../../helpers/getReviewStatus";
 import useUserInfo from "../../../../hook/user/useUserInfo";
+import Report from "../../../../components/report";
+
 import {
   PlusCircleOutlined,
   MinusCircleOutlined,
@@ -105,6 +107,7 @@ const FlashCardDetailScreen = () => {
   const onSubmitUpdate = (body) => {
     updateFlashCard.mutate(body, {
       onSuccess() {
+
         notification.success({ message: "Successfully" });
         queryClient.invalidateQueries("flashcards");
         setIsViewModal(false);
@@ -117,9 +120,24 @@ const FlashCardDetailScreen = () => {
   return (
     <FlashcardDetailStyle>
       <div className="flashcard-detail  flex items-start justify-center mt-[100px] flashcard-detail">
-        <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed top-[63px] left-0 right-0  z-10 ">
-          <p className="font-bold text-sm">{topicName}</p>
-          <p className="font-bold text-xl">{activeFlashcard?.name}</p>
+        <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed top-[63px] left-0 right-0  z-10  ">
+          <div className="flex justify-between ">
+            <p className="font-bold text-sm">{topicName}</p>
+            <Report resourceType={"flashcard"} resourceId={activeFlashcard?.id} />
+          </div>
+          <div className="flex justify-between ">
+            <p className="font-bold text-xl">{activeFlashcard?.name}</p>
+            {isAuthor && (
+              <button
+                onClick={() => setIsViewModal(true)}
+                className="mt-3 mr-1 p-2 w-[100px] rounded hover:bg-[#7F00FF] hover:text-[white]"
+              >
+                {" "}
+                <span className="mr-[3px]">Update</span> <PlusCircleOutlined />
+              </button>
+            )}
+          </div>
+
           <Tag
             onClick={() => handleReview("helpful")}
             className="hover:opacity-[0.4]"
@@ -138,15 +156,7 @@ const FlashCardDetailScreen = () => {
           >
             {totalUnhelpful}{" "}
           </Tag>
-          {isAuthor && (
-            <div
-              onClick={() => setIsViewModal(true)}
-              className="mt-3 p-2 w-[100px] rounded hover:bg-[#7F00FF] hover:text-[white]"
-            >
-              {" "}
-              <span className="mr-[3px]">Update</span> <PlusCircleOutlined />
-            </div>
-          )}
+
         </div>
         {activeFlashcard && <FlashcardArray cards={renderCard()} />}
       </div>
@@ -173,6 +183,7 @@ const FlashCardDetailScreen = () => {
             open={isViewModal}
             onCancel={() => setIsViewModal(false)}
           >
+
             <Form
               initialValues={activeFlashcard}
               onFinish={onSubmitUpdate}
@@ -181,6 +192,7 @@ const FlashCardDetailScreen = () => {
               <Form.Item name="name" label="Name" rules={[{ required: true }]}>
                 <Input />
               </Form.Item>
+
 
               <Form.Item
                 name="topicId"
@@ -207,6 +219,7 @@ const FlashCardDetailScreen = () => {
                             {...restField}
                             name={[name, "question"]}
                             rules={[
+
                               {
                                 required: true,
                                 message: "Missing first question",
@@ -219,10 +232,12 @@ const FlashCardDetailScreen = () => {
                             {...restField}
                             name={[name, "answer"]}
                             rules={[
+
                               {
                                 required: true,
                                 message: "Missing last answer",
                               },
+
                             ]}
                           >
                             <Input.TextArea placeholder="Answer" />

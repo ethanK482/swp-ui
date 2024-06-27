@@ -8,6 +8,7 @@ import useAllTopic from "../../../../hook/topic/useAllTopic";
 import { Tag } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../../api/http";
+import Report from "../../../../components/report";
 import { loginRequire } from "../../../../common/protectRoute";
 
 const DocumentDetail = () => {
@@ -37,7 +38,7 @@ const DocumentDetail = () => {
     formData.append('review', state)
     formData.append('documentId', documentActive?.id)
     reviewMutation.mutate(formData, {
-      onSuccess(){
+      onSuccess() {
         queryClient.invalidateQueries("documents");
       }
     })
@@ -45,17 +46,22 @@ const DocumentDetail = () => {
   return (
     <div className="flex flex-col">
       <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed left-0 right-0 ">
-        <p className="font-bold text-sm">{topicName}</p>
+        <div className="flex justify-between">
+          <p className="font-bold text-sm">{topicName} </p>
+          <Report resourceType={"document"} resourceId={documentActive?.id} />
+        </div>
+
         <p className="font-bold text-xl">{documentActive?.title}</p>
-        <Tag onClick={ () => handleReview('helpful')} className="hover:opacity-[0.4]" style={{cursor:"pointer"}} icon={<LikeOutlined   />} color="green">
+        <Tag onClick={() => handleReview('helpful')} className="hover:opacity-[0.4]" style={{ cursor: "pointer" }} icon={<LikeOutlined />} color="green">
           {totalHelpful}
         </Tag>
-        <Tag onClick={ () => handleReview('unhelpful')} className="hover:opacity-[0.4]"  style={{cursor:"pointer"}} icon={<DislikeOutlined />} color="warning">
+        <Tag onClick={() => handleReview('unhelpful')} className="hover:opacity-[0.4]" style={{ cursor: "pointer" }} icon={<DislikeOutlined />} color="warning">
           {totalUnhelpful}{" "}
         </Tag>
+
       </div>
 
-      <PDFViewer   file={documentActive?.fileUrl} />
+      <PDFViewer file={documentActive?.fileUrl} />
     </div>
   );
 };

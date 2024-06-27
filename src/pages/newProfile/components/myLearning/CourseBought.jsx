@@ -8,6 +8,7 @@ import VideoPlayer from "../../../expert/conponents/Video";
 import CreateReview from "./CreateReview";
 import calculateRating from "../../../../helpers/CalculateRating";
 import { FaStar } from "react-icons/fa";
+import Report from "../../../../components/report";
 const CourseBought = () => {
   const { id } = useParams();
 
@@ -60,6 +61,7 @@ const CourseBought = () => {
           <div className="course-detail_banner__info">
             <h1 className="course-detail_banner__info___title mb-3">
               {course?.name}
+              
             </h1>
             <div className="flex items-center mb-2">
               {" "}
@@ -84,9 +86,11 @@ const CourseBought = () => {
                   "/" +
                   new Date(course?.updated_at)?.getFullYear()}
               </span>
+              
             </p>
+            
           </div>
-          <div>
+          <div className="flex justify-between">
             <Card
               style={{ width: "300px", minHeight: "150px", margin: "auto" }}
               cover={
@@ -101,8 +105,11 @@ const CourseBought = () => {
                 />
               }
             ></Card>
+            <Report resourceType={"course"} resourceId={course?.id}/>
           </div>
+          
         </div>
+        
 
         <div className="course-detail_content">
           <div className="course-detail_content__lessons">

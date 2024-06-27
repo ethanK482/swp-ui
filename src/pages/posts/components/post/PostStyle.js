@@ -9,7 +9,7 @@ const PostStyle = styled.div`
     &_info {
         display: flex;
         gap: 3px;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
         p{
             font-weight: 600;

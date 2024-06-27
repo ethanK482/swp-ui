@@ -11,7 +11,7 @@ const CourseDetailStyle = styled.div`
       padding: 20px 40px;
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      grid-column: span 2;
+      grid-column: span 3;
       background-color: #2c2f31;
       min-height: 270px;
       &__info {
