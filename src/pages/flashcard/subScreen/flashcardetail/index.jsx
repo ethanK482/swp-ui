@@ -10,6 +10,8 @@ import useAllTopic from "../../../../hook/topic/useAllTopic";
 import getReviewStatus from "../../../../helpers/getReviewStatus";
 import useAuthorRoute from "../../../../hook/user/useAuthorRoute";
 import useUserInfo from "../../../../hook/user/useUserInfo";
+import Report from "../../../../components/report";
+
 import {
   PlusCircleOutlined,
   MinusCircleOutlined,
@@ -29,7 +31,7 @@ const FlashCardDetailScreen = () => {
   const [isViewModal, setIsViewModal] = useState(false);
   const topicOptions = () => {
     return topics?.map((topic) => ({
-      value: topic.id +"",
+      value: topic.id + "",
       label: <span>{topic.name}</span>,
     }));
   };
@@ -93,23 +95,39 @@ const FlashCardDetailScreen = () => {
     },
   });
   const topicName = topics?.find((i) => i.id == activeFlashcard?.topicId)?.name;
-  const onSubmitUpdate = (body)=>{
-    updateFlashCard.mutate(body, {onSuccess(){
-      notification.success({message: "Successfully"})
-      queryClient.invalidateQueries("flashcards");
-      setIsViewModal(false)
-    },
-    onError(){
-      notification.success({message: "Failed"})
-    }
-  })
+  const onSubmitUpdate = (body) => {
+    updateFlashCard.mutate(body, {
+      onSuccess() {
+        notification.success({ message: "Successfully" })
+        queryClient.invalidateQueries("flashcards");
+        setIsViewModal(false)
+      },
+      onError() {
+        notification.success({ message: "Failed" })
+      }
+    })
   }
   return (
     <FlashcardDetailStyle>
       <div className="flashcard-detail  flex items-start justify-center mt-[100px] flashcard-detail">
-        <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed top-[63px] left-0 right-0  z-10 ">
-          <p className="font-bold text-sm">{topicName}</p>
-          <p className="font-bold text-xl">{activeFlashcard?.name}</p>
+        <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed top-[63px] left-0 right-0  z-10  ">
+          <div className="flex justify-between ">
+            <p className="font-bold text-sm">{topicName}</p>
+            <Report resourceType={"flashcard"} resourceId={activeFlashcard?.id} />
+          </div>
+          <div className="flex justify-between ">
+            <p className="font-bold text-xl">{activeFlashcard?.name}</p>
+            {isAuthor && (
+              <button
+                onClick={() => setIsViewModal(true)}
+                className="mt-3 mr-1 p-2 w-[100px] rounded hover:bg-[#7F00FF] hover:text-[white]"
+              >
+                {" "}
+                <span className="mr-[3px]">Update</span> <PlusCircleOutlined />
+              </button>
+            )}
+          </div>
+
           <Tag
             onClick={() => handleReview("helpful")}
             className="hover:opacity-[0.4]"
@@ -128,15 +146,7 @@ const FlashCardDetailScreen = () => {
           >
             {totalUnhelpful}{" "}
           </Tag>
-          {isAuthor && (
-            <div
-              onClick={() => setIsViewModal(true)}
-              className="mt-3 p-2 w-[100px] rounded hover:bg-[#7F00FF] hover:text-[white]"
-            >
-              {" "}
-              <span className="mr-[3px]">Update</span> <PlusCircleOutlined />
-            </div>
-          )}
+
         </div>
         {activeFlashcard && <FlashcardArray cards={renderCard()} />}
       </div>
@@ -158,87 +168,87 @@ const FlashCardDetailScreen = () => {
             })}
           </div>
           <Modal
-        footer=""
-        title={`Update flashcards`}
-        open={isViewModal}
-        onCancel={() => setIsViewModal(false)}
-      >
-        <Form initialValues={activeFlashcard} onFinish={onSubmitUpdate} layout="vertical">
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input />
-          </Form.Item>
-
-          <Form.Item name="topicId" label="Topic" rules={[{ required: true }]}>
-            <Select placeholder="Select topic" options={topicOptions()} />
-          </Form.Item>
-          <>
-            <Form.List name="questions">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space
-                      key={key}
-                      style={{
-                        display: "flex",
-                        marginBottom: 8,
-                        justifyContent: "space-around",
-                      }}
-                      align="baseline"
-                    >
-                      <Form.Item
-                        {...restField}
-                        name={[name, "question"]}
-                        rules={[
-                          { required: true, message: "Missing first question" },
-                        ]}
-                      >
-                        <Input.TextArea placeholder="question" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "answer"]}
-                        rules={[
-                          { required: true, message: "Missing last answer" },
-                        ]}
-                      >
-                        <Input.TextArea placeholder="Answer" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
-                    >
-                      Add flashcard
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-          </>
-          <Form.Item
-            name="description"
-            label="Description"
-            rules={[{ required: true }]}
+            footer=""
+            title={`Update flashcards`}
+            open={isViewModal}
+            onCancel={() => setIsViewModal(false)}
           >
-            <Input.TextArea />
-          </Form.Item>
-          <Form.Item style={{ textAlign: "right" }}>
-            <Button
-              type="primary"
-              loading={updateFlashCard.isPending}
-              htmlType="submit"
-            >
-              Update
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
+            <Form initialValues={activeFlashcard} onFinish={onSubmitUpdate} layout="vertical">
+              <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                <Input />
+              </Form.Item>
+
+              <Form.Item name="topicId" label="Topic" rules={[{ required: true }]}>
+                <Select placeholder="Select topic" options={topicOptions()} />
+              </Form.Item>
+              <>
+                <Form.List name="questions">
+                  {(fields, { add, remove }) => (
+                    <>
+                      {fields.map(({ key, name, ...restField }) => (
+                        <Space
+                          key={key}
+                          style={{
+                            display: "flex",
+                            marginBottom: 8,
+                            justifyContent: "space-around",
+                          }}
+                          align="baseline"
+                        >
+                          <Form.Item
+                            {...restField}
+                            name={[name, "question"]}
+                            rules={[
+                              { required: true, message: "Missing first question" },
+                            ]}
+                          >
+                            <Input.TextArea placeholder="question" />
+                          </Form.Item>
+                          <Form.Item
+                            {...restField}
+                            name={[name, "answer"]}
+                            rules={[
+                              { required: true, message: "Missing last answer" },
+                            ]}
+                          >
+                            <Input.TextArea placeholder="Answer" />
+                          </Form.Item>
+                          <MinusCircleOutlined onClick={() => remove(name)} />
+                        </Space>
+                      ))}
+                      <Form.Item>
+                        <Button
+                          type="dashed"
+
+                          onClick={() => add()}
+                          block
+                          icon={<PlusOutlined />}
+                        >
+                          Add flashcard
+                        </Button>
+                      </Form.Item>
+                    </>
+                  )}
+                </Form.List>
+              </>
+              <Form.Item
+                name="description"
+                label="Description"
+                rules={[{ required: true }]}
+              >
+                <Input.TextArea />
+              </Form.Item>
+              <Form.Item style={{ textAlign: "right" }}>
+                <Button
+                  type="primary"
+                  loading={updateFlashCard.isPending}
+                  htmlType="submit"
+                >
+                  Update
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       )}
     </FlashcardDetailStyle>
