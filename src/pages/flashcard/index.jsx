@@ -23,6 +23,7 @@ import api from "../../api/http";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "./components/FlashCard";
 import Loading from "../../components/loading";
+import { ACTIVE_RESOURCE } from "../../common/constants";
 const ITEM_DISPLAY = 12;
 const FlashcardScreen = () => {
   const queryClient = useQueryClient();
@@ -43,7 +44,9 @@ const FlashcardScreen = () => {
     }));
   };
   useEffect(() => {
-    let filteredFlashcards = flashcards;
+    let filteredFlashcards = flashcards?.filter(
+      (flashcard) => flashcard.state === ACTIVE_RESOURCE
+    );
     if (topicFilter) {
       filteredFlashcards = flashcards.filter(
         (document) => document.topicId == topicFilter

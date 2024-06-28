@@ -6,6 +6,7 @@ import getReviewStatus from "../../../helpers/getReviewStatus";
 import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import useAllUser from "../../../hook/user/useAllUser";
 import Meta from "antd/es/card/Meta";
+import { ACTIVE_RESOURCE } from "../../../common/constants";
 const DocumentCard = ({ document }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -36,9 +37,16 @@ const DocumentCard = ({ document }) => {
             </>
           }
           description={
-            <p className="font-bold text-black">
-              {findUserById(document.userId)?.fullName}
-            </p>
+            <>
+              <p className="font-bold text-black">
+                {findUserById(document.userId)?.fullName}
+              </p>
+              {document.state === ACTIVE_RESOURCE ? (
+                <Tag color="green">Active</Tag>
+              ) : (
+                <Tag color="gold">Pending</Tag>
+              )}
+            </>
           }
         />
       </Card>

@@ -6,6 +6,7 @@ import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import useAllUser from "../../../hook/user/useAllUser";
 import Meta from "antd/es/card/Meta";
 import DocumentCardStyle from "../../documents/DocumentCard.style";
+import { ACTIVE_RESOURCE } from "../../../common/constants";
 const FlashCard = ({ flashcard }) => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -41,6 +42,11 @@ const FlashCard = ({ flashcard }) => {
                 {findUserById(flashcard.userId)?.fullName}
               </p>
               <Tag>{flashcard.questions.length} cards</Tag>
+              {flashcard.state === ACTIVE_RESOURCE ? (
+                <Tag color="green">Active</Tag>
+              ) : (
+                <Tag color="gold">Pending</Tag>
+              )}
             </>
           }
         />

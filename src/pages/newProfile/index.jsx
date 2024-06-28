@@ -220,12 +220,12 @@ const Profile = () => {
                 src={user?.avatarUrl}
               />
             )}
-            <span
+            <button
               onClick={showModal}
               className="profile_avatar_top_update p-10 bg-slate-100"
             >
               Update
-            </span>
+            </button>
             <p>{user?.fullName}</p>
           </div>
           <div>
