@@ -3,7 +3,7 @@ import api from "../../api/http";
 
 const useUserInfo = () => {
   const token = localStorage.getItem("token");
-  return (useQuery({
+  return useQuery({
     queryKey: ["PROFILE"],
     queryFn: () =>
       api.get("/profile", {
@@ -12,9 +12,9 @@ const useUserInfo = () => {
         },
       }),
     enabled: !!token,
-    cacheTime: Infinity, 
-    staleTime: Infinity, 
+    cacheTime: Infinity,
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
-  }))?.data?.data;
+  })?.data?.data;
 };
 export default useUserInfo;

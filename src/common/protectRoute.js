@@ -1,3 +1,3 @@
 export const loginRequire = () => {
-  if (!localStorage.getItem("item")) window.location.replace("/login");
+  if (!localStorage.getItem("token")) window.location.replace("/login");
 };

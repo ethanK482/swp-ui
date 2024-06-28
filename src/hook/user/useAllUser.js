@@ -4,10 +4,9 @@ import api from "../../api/http";
 const useAllUser = () => {
   return useQuery({
     queryKey: ["PUBLIC_USER"],
-    queryFn: () =>
-      api.get("/public/users"),
-    cacheTime: Infinity, 
-    staleTime: Infinity, 
+    queryFn: () => api.get("/public/users"),
+    cacheTime: Infinity,
+    staleTime: Infinity,
     refetchOnWindowFocus: false,
   })?.data?.data;
 };

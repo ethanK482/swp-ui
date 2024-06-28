@@ -281,13 +281,13 @@ const ListCourseTab = () => {
           >
             &larr; Back
           </Button>
-          <div
+          <button
             onClick={() => setIsViewLessonModal(true)}
             className="mr-5 p-2 rounded hover:bg-[#7F00FF] hover:text-[white]"
           >
             {" "}
             <span className="mr-[3px]">Add Lesson</span> <PlusCircleOutlined />
-          </div>
+          </button>
         </div>
 
         <Card

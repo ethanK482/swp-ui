@@ -6,6 +6,7 @@ import {
   Input,
   Menu,
   Modal,
+  Popover,
   Select,
   Tag,
   notification,
@@ -22,7 +23,12 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 import MyFlashCard from "./components/myFlashcard";
 import MyDocument from "./components/myDocument";
-import { ADMIN, EXPERT, USER } from "../../common/constants";
+import {
+  ADMIN,
+  EXPERT,
+  EXPERT_MARK_DEMAND,
+  USER,
+} from "../../common/constants";
 const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
@@ -150,6 +156,7 @@ const Profile = () => {
       }
     }
   };
+
   const getLegitMarkTag = (mark) => {
     if (mark < 0) return <Tag color="black">Legit {mark}</Tag>;
     if (mark == 0) return <Tag color="green">Legit {mark}</Tag>;
@@ -169,7 +176,22 @@ const Profile = () => {
       }
     }
   };
-
+  const getLegitHoverContent = (mark) => {
+    if (mark < EXPERT_MARK_DEMAND) {
+      return (
+        <p>
+          By contributing useful material and gaining 200 reputation points, you
+          can become an expert of the platform
+        </p>
+      );
+    } else if (role !== EXPERT)
+      return (
+        <div>
+          <p>Let request to be an FU Records Expert</p>
+        </div>
+      );
+    return <p>Keep your contribute</p>;
+  };
   const menuItems = [
     getManagement(),
     {
@@ -208,8 +230,21 @@ const Profile = () => {
           </div>
           <div>
             {" "}
-            {getRoleTag()} {getLegitMarkTag(user?.legitMark)}
+            {getRoleTag()}{" "}
+            <Popover content={getLegitHoverContent(user?.legitMark)}>
+              {
+                <span className="cursor-pointer">
+                  {getLegitMarkTag(user?.legitMark)}
+                </span>
+              }
+            </Popover>
           </div>
+          {user?.balance && (
+            <Tag color="gold" className="mt-2">
+              {" "}
+              Balance: {Number(user.balance).toLocaleString()}đ
+            </Tag>
+          )}
           <div>
             <Menu
               onClick={menuOnclick}

@@ -4,24 +4,26 @@ import { Avatar } from "antd";
 const Header = () => {
   const user = useUserInfo();
   const navigate = useNavigate();
-  const handleGoProfile = ()=>{
-    navigate("/profile")
-  }
+  const handleGoProfile = () => {
+    navigate("/profile");
+  };
   const renderAvatar = () => {
     return (
       <div onClick={handleGoProfile} className="flex items-center  user_avatar">
         <div className="group relative cursor-pointer">
           <div className="flex items-center justify-between">
-            <Avatar size={40}    src={user?.avatarUrl}/>
+            <Avatar size={40} src={user?.avatarUrl} />
             <span className="ml-3 text-black">{user?.fullName}</span>
           </div>
-  
         </div>
       </div>
     );
   };
   return (
-    <header style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }} className="fixed z-20 inset-x-0  border-2">
+    <header
+      style={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
+      className="fixed z-20 inset-x-0  border-2"
+    >
       <nav className=" border-gray-200 bg-white text-black px-4 lg:px-6 py-2.5 ">
         <div className="flex  flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link to="/" className="flex items-center">
@@ -44,7 +46,7 @@ const Header = () => {
               Flashcards
             </span>
           </Link>
-            <Link to="/documents" className="flex items-center">
+          <Link to="/documents" className="flex items-center">
             <span className="self-center text-l font-semibold whitespace-nowrap text-black hover:text-slate-400">
               Documents
             </span>
@@ -54,8 +56,7 @@ const Header = () => {
               Learning
             </span>
           </Link>
-        
-          
+
           <div className="flex items-center lg:order-2">
             {user ? (
               renderAvatar()
