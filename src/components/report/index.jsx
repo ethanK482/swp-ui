@@ -28,6 +28,7 @@ const Report = ({ resourceType, resourceId }) => {
       onSuccess() {
         notification.success({ message: "Upload Report successfully" });
         setIsModalOpen(false);
+
       },
     });
   };

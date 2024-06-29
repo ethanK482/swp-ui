@@ -3,12 +3,14 @@ import {
   ContainerOutlined,
   DesktopOutlined,
   MailOutlined,
-  PieChartOutlined,
+  ExclamationOutlined
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import DashboardStyle from "./Dashboard.style";
+import ReportTab from "./tab/ReportTab.jsx";
+import { useState } from "react";
 const items = [
-  { key: "1", icon: <PieChartOutlined />, label: "Option 1" },
+  { key: "1", icon: <ExclamationOutlined />, label: "List Report" },
   { key: "2", icon: <DesktopOutlined />, label: "Option 2" },
   { key: "3", icon: <ContainerOutlined />, label: "Option 3" },
   { key: "4", icon: <ContainerOutlined />, label: "Option 4" },
@@ -53,17 +55,32 @@ const items = [
 const Dashboard = () => {
   const userRole = localStorage.getItem("role");
   if (userRole !== "admin") window.location.replace("/");
-
+  const [selectedKey, setSelectedKey] = useState("1");
+  const handleClick = (e) => {
+    setSelectedKey(e.key);
+  };
+  const renderTab = () => {
+    switch (selectedKey) {
+      case "1":
+        return <ReportTab />;
+      default:
+        return <div>Default Content</div>;
+    }
+  };
   return (
     <DashboardStyle>
       <div className="dashboard" style={{ width: 256 }}>
-        <Menu
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          theme="dark"
-          items={items}
-        />
+        <div>
+          <Menu
+            onClick={handleClick}
+            defaultSelectedKeys={["1"]}
+            defaultOpenKeys={["sub1"]}
+            mode="inline"
+            theme="dark"
+            items={items}
+          />
+        </div>
+       <div className="dashboard_tab ">{renderTab()}</div>
       </div>
     </DashboardStyle>
   );
