@@ -1,3 +1,4 @@
+import { Col, Row } from "antd";
 import Loading from "../../../../components/loading";
 import useAllFlashCard from "../../../../hook/flashcard/useAllFlashCard";
 import useUserInfo from "../../../../hook/user/useUserInfo";
@@ -18,11 +19,20 @@ const MyFlashCard = () => {
           <div className="my-learning_heading">
             <p className="my-learning_heading__title">My Flashcards</p>
           </div>
-          <div className="my-learning_courses">
+
+          <Row gutter={[16, 40]} className="px-[40px] py-[20px]">
             {flashcards?.map((flashcard) => (
-              <FlashCard key={flashcard.id} flashcard={flashcard} />
+              <Col
+                key={document.id}
+                className="gutter-row"
+                xs={24}
+                sm={12}
+                md={6}
+              >
+                <FlashCard flashcard={flashcard} />
+              </Col>
             ))}
-          </div>
+          </Row>
         </div>
       </MyLearningStyle>
     ) : (

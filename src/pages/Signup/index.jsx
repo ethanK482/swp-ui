@@ -6,11 +6,9 @@ import { Link, useNavigate } from "react-router-dom";
 import GoogleLogin from "react-google-login";
 import { gapi } from "gapi-script";
 import { useEffect } from "react";
-import useProtectRoute from "../../hook/user/useProtectRoute";
 const clientGoogleId =
   "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
 const SignUpScreen = () => {
-  useProtectRoute();
   const queryClient = useQueryClient();
   useEffect(() => {
     gapi.load("client:auth2", () => {

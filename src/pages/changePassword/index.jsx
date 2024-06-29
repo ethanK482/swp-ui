@@ -3,10 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../api/http";
 import ChangePasswordStyle from "./ChangePassword.style";
-import useProtectRoute from "../../hook/user/useProtectRoute";
 const ChangePassword = () => {
     const navigate = useNavigate();
-    useProtectRoute();
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },

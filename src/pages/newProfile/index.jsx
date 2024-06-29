@@ -6,6 +6,7 @@ import {
   Input,
   Menu,
   Modal,
+  Popover,
   Select,
   Tag,
   notification,
@@ -22,6 +23,12 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 import MyFlashCard from "./components/myFlashcard";
 import MyDocument from "./components/myDocument";
+import {
+  ADMIN,
+  EXPERT,
+  EXPERT_MARK_DEMAND,
+  USER,
+} from "../../common/constants";
 const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
@@ -131,7 +138,7 @@ const Profile = () => {
   };
   const getManagement = () => {
     switch (role) {
-      case "admin": {
+      case ADMIN: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,
@@ -139,7 +146,7 @@ const Profile = () => {
           children: [{ key: "dashboard", label: "Admin Dashboard" }],
         };
       }
-      case "expert": {
+      case EXPERT: {
         return {
           key: "sub1",
           icon: <AppstoreOutlined />,
@@ -149,6 +156,7 @@ const Profile = () => {
       }
     }
   };
+
   const getLegitMarkTag = (mark) => {
     if (mark < 0) return <Tag color="black">Legit {mark}</Tag>;
     if (mark == 0) return <Tag color="green">Legit {mark}</Tag>;
@@ -157,18 +165,33 @@ const Profile = () => {
   };
   const getRoleTag = () => {
     switch (role) {
-      case "admin": {
+      case ADMIN: {
         return <Tag color="gold">ADMIN</Tag>;
       }
-      case "expert": {
+      case EXPERT: {
         return <Tag color="purple">EXPERT</Tag>;
       }
-      case "user": {
+      case USER: {
         return <Tag color="green">USER</Tag>;
       }
     }
   };
-
+  const getLegitHoverContent = (mark) => {
+    if (mark < EXPERT_MARK_DEMAND) {
+      return (
+        <p>
+          By contributing useful material and gaining 200 reputation points, you
+          can become an expert of the platform
+        </p>
+      );
+    } else if (role !== EXPERT)
+      return (
+        <div>
+          <p>Let request to be an FU Records Expert</p>
+        </div>
+      );
+    return <p>Keep your contribute</p>;
+  };
   const menuItems = [
     getManagement(),
     {
@@ -181,7 +204,9 @@ const Profile = () => {
       ],
     },
   ];
-  return !user ?  <Loading/> : (
+  return !user ? (
+    <Loading />
+  ) : (
     <ProfileStyle>
       <div className="profile">
         <div className="profile_avatar">
@@ -195,15 +220,31 @@ const Profile = () => {
                 src={user?.avatarUrl}
               />
             )}
-            <span
+            <button
               onClick={showModal}
               className="profile_avatar_top_update p-10 bg-slate-100"
             >
               Update
-            </span>
+            </button>
             <p>{user?.fullName}</p>
           </div>
-            <div> {getRoleTag() } {getLegitMarkTag(user?.legitMark)}</div>
+          <div>
+            {" "}
+            {getRoleTag()}{" "}
+            <Popover content={getLegitHoverContent(user?.legitMark)}>
+              {
+                <span className="cursor-pointer">
+                  {getLegitMarkTag(user?.legitMark)}
+                </span>
+              }
+            </Popover>
+          </div>
+          {user?.balance && (
+            <Tag color="gold" className="mt-2">
+              {" "}
+              Balance: {Number(user.balance).toLocaleString()}đ
+            </Tag>
+          )}
           <div>
             <Menu
               onClick={menuOnclick}
@@ -267,8 +308,8 @@ const Profile = () => {
         </div>
       </div>
       <MyLearning />
-      <MyFlashCard/>
-      <MyDocument/>
+      <MyFlashCard />
+      <MyDocument />
       <Modal
         title="Update avatar ?"
         open={isModalOpen}

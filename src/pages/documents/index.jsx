@@ -19,6 +19,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import DocumentCard from "./components/DocumentCard";
 import Loading from "../../components/loading";
+import { ACTIVE_RESOURCE } from "../../common/constants";
 const ITEM_DISPLAY = 12;
 const Document = () => {
   const queryClient = useQueryClient();
@@ -39,7 +40,9 @@ const Document = () => {
     }));
   };
   useEffect(() => {
-    let filteredDocuments = documents;
+    let filteredDocuments = documents?.filter(
+      (flashcard) => flashcard.state === ACTIVE_RESOURCE
+    );
     if (topicFilter) {
       filteredDocuments = documents.filter(
         (document) => document.topicId == topicFilter
@@ -95,7 +98,9 @@ const Document = () => {
     });
   };
   const isDataReady = documents && topics;
-  return !isDataReady ? <Loading/> :  (
+  return !isDataReady ? (
+    <Loading />
+  ) : (
     <DocumentStyle>
       <div className="min-h-[100vh] px-[50px]  ">
         <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2">

@@ -23,6 +23,7 @@ import api from "../../api/http";
 import useAllFlashCard from "../../hook/flashcard/useAllFlashCard";
 import FlashCard from "./components/FlashCard";
 import Loading from "../../components/loading";
+import { ACTIVE_RESOURCE } from "../../common/constants";
 const ITEM_DISPLAY = 12;
 const FlashcardScreen = () => {
   const queryClient = useQueryClient();
@@ -43,7 +44,9 @@ const FlashcardScreen = () => {
     }));
   };
   useEffect(() => {
-    let filteredFlashcards = flashcards;
+    let filteredFlashcards = flashcards?.filter(
+      (flashcard) => flashcard.state === ACTIVE_RESOURCE
+    );
     if (topicFilter) {
       filteredFlashcards = flashcards.filter(
         (document) => document.topicId == topicFilter
@@ -82,7 +85,9 @@ const FlashcardScreen = () => {
     });
   };
   const isDataReady = flashcards && topics;
-  return !isDataReady ? <Loading/> : (
+  return !isDataReady ? (
+    <Loading />
+  ) : (
     <>
       <div className="min-h-[100vh] px-[50px]  ">
         <div className="fixed z-20 border-1  inset-x-0 top-[59px] border-2">
@@ -151,55 +156,55 @@ const FlashcardScreen = () => {
           <Form.Item name="topicId" label="Topic" rules={[{ required: true }]}>
             <Select placeholder="Select topic" options={topicOptions()} />
           </Form.Item>
-          <>
-            <Form.List name="questions">
-              {(fields, { add, remove }) => (
-                <>
-                  {fields.map(({ key, name, ...restField }) => (
-                    <Space
-                      key={key}
-                      style={{
-                        display: "flex",
-                        marginBottom: 8,
-                        justifyContent: "space-around",
-                      }}
-                      align="baseline"
+
+          <Form.List name="questions">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Space
+                    key={key}
+                    style={{
+                      display: "flex",
+                      marginBottom: 8,
+                      justifyContent: "space-around",
+                    }}
+                    align="baseline"
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "question"]}
+                      rules={[
+                        { required: true, message: "Missing first question" },
+                      ]}
                     >
-                      <Form.Item
-                        {...restField}
-                        name={[name, "question"]}
-                        rules={[
-                          { required: true, message: "Missing first question" },
-                        ]}
-                      >
-                        <Input.TextArea placeholder="question" />
-                      </Form.Item>
-                      <Form.Item
-                        {...restField}
-                        name={[name, "answer"]}
-                        rules={[
-                          { required: true, message: "Missing last answer" },
-                        ]}
-                      >
-                        <Input.TextArea placeholder="Answer" />
-                      </Form.Item>
-                      <MinusCircleOutlined onClick={() => remove(name)} />
-                    </Space>
-                  ))}
-                  <Form.Item>
-                    <Button
-                      type="dashed"
-                      onClick={() => add()}
-                      block
-                      icon={<PlusOutlined />}
+                      <Input.TextArea placeholder="question" />
+                    </Form.Item>
+                    <Form.Item
+                      {...restField}
+                      name={[name, "answer"]}
+                      rules={[
+                        { required: true, message: "Missing last answer" },
+                      ]}
                     >
-                      Add flashcard
-                    </Button>
-                  </Form.Item>
-                </>
-              )}
-            </Form.List>
-          </>
+                      <Input.TextArea placeholder="Answer" />
+                    </Form.Item>
+                    <MinusCircleOutlined onClick={() => remove(name)} />
+                  </Space>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add flashcard
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+
           <Form.Item
             name="description"
             label="Description"

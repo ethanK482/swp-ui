@@ -1,19 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 
-const useAllExpertCourse = () => {
+const useAllStudent = (courseId) => {
+  console.log(!!courseId);
   const token = localStorage.getItem("token");
   return useQuery({
-    queryKey: ["EXPERT_COURSE"],
+    queryKey: ["STUDENTS"],
     queryFn: () =>
-      api.get("/expert/courses", {
+      api.get(`/course/students?courseId=${courseId}`, {
         headers: {
           Authorization: token,
         },
       }),
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-  })?.data?.data;
+    enabled: !!courseId,
+  });
 };
-export default useAllExpertCourse;
+export default useAllStudent;
