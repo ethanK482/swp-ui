@@ -65,7 +65,7 @@ const Report = ({ resourceType, resourceId }) => {
             <Modal title="Report Resource" footer=" " open={isModalOpen} onCancel={handleCancel}>
                 <Form onFinish={onSubmitForm} layout="vertical" >
                     <Form.Item name="reason" label="Reason"  >
-                        <Input className='input-item'></Input>
+                        <Input.TextArea maxLength={255} rows={3} className='input-item'></Input.TextArea>
 
                     </Form.Item>
                     <Form.Item style={{ textAlign: "right" }}>
