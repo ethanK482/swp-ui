@@ -54,7 +54,7 @@ const items = [
 ];
 const Dashboard = () => {
   const userRole = localStorage.getItem("role");
-  if (userRole !== "admin") window.location.replace("/");
+  if (userRole !== "ADMIN") window.location.replace("/");
   const [selectedKey, setSelectedKey] = useState("1");
   const handleClick = (e) => {
     setSelectedKey(e.key);
