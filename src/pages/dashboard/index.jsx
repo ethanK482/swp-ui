@@ -1,20 +1,27 @@
 import {
   AppstoreOutlined,
   ContainerOutlined,
-  DesktopOutlined,
+  FileWordFilled,
   MailOutlined,
-  ExclamationOutlined
+  TagsFilled,
+  ReadFilled,
+  UserOutlined,
+  ExclamationCircleFilled
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import DashboardStyle from "./Dashboard.style";
 import ReportTab from "./tab/ReportTab.jsx";
+import ListPendingDocument from "./tab/ListPendingDocument.jsx";
 import { useState } from "react";
+import ListUser from "./tab/ListUser.jsx";
+import ListPendingFlashcard from "./tab/ListPendingFlashcard.jsx";
+import ListPendingCourse from "./tab/ListPendingCourse.jsx";
 const items = [
-  { key: "1", icon: <ExclamationOutlined />, label: "List Report" },
-  { key: "2", icon: <DesktopOutlined />, label: "Option 2" },
-  { key: "3", icon: <ContainerOutlined />, label: "Option 3" },
-  { key: "4", icon: <ContainerOutlined />, label: "Option 4" },
-  { key: "5", icon: <ContainerOutlined />, label: "Option 5" },
+  { key: "1", icon: <ExclamationCircleFilled />, label: "List Report" },
+  { key: "2", icon: <FileWordFilled />, label: "List Pending Documents" },
+  { key: "3", icon: <ReadFilled />, label: "List Pending Courses" },
+  { key: "4", icon: <TagsFilled />, label: "List Pending Flashcards" },
+  { key: "5", icon: <UserOutlined />, label: "List User" },
   { key: "6", icon: <ContainerOutlined />, label: "Option 6" },
   { key: "7", icon: <ContainerOutlined />, label: "Option 7" },
   { key: "8", icon: <ContainerOutlined />, label: "Option 8" },
@@ -63,6 +70,14 @@ const Dashboard = () => {
     switch (selectedKey) {
       case "1":
         return <ReportTab />;
+      case "2":
+        return <ListPendingDocument/>
+        case "3":
+        return <ListPendingCourse/>
+        case "4":
+        return <ListPendingFlashcard/>
+        case "5":
+        return <ListUser/>
       default:
         return <div>Default Content</div>;
     }
