@@ -3,24 +3,24 @@ import styled from "styled-components";
 const ProfileStyle = styled.div`
   .profile {
     display: flex;
-    height: 60vh;
+    height: 90vh;
     margin: 20px 50px 40px 50px;
     border: 1px solid #d1d7db;
     &_avatar {
-      &_top{
+      &_top {
         display: flex;
         flex-direction: column;
         align-items: center;
         border-bottom: 1px solid #d1d7db;
         margin-bottom: 20px;
-        &_image{
-          position: relative; 
+        &_image {
+          position: relative;
         }
-        &_update{
-          bottom: 74%;
+        &_update {
+          bottom: 72%;
           opacity: 0;
           border-radius: 10px;
-          &:hover{
+          &:hover {
             cursor: pointer;
             text-decoration: underline;
             opacity: 0.8;
@@ -51,7 +51,7 @@ const ProfileStyle = styled.div`
         display: flex;
         color: #ffff;
         padding-top: 10px;
-        background-color:  #2C2F31;;
+        background-color: #2c2f31;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -68,7 +68,7 @@ const ProfileStyle = styled.div`
       }
       &_content {
         height: 100%;
-        padding: 50px 160px;
+        padding: 40px 160px;
       }
     }
     .ant-form-item-control-input {
@@ -79,7 +79,7 @@ const ProfileStyle = styled.div`
         width: 100%;
         border-radius: 0 !important;
         height: 40px;
-        border: 1px solid #2C2F31;
+        border: 1px solid #2c2f31;
       }
     }
   }

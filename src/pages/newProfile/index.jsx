@@ -33,7 +33,6 @@ const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
   const token = localStorage.getItem("token");
-  const [isShowSave, setIsShowSave] = useState(false);
   const updateProfile = useMutation({
     mutationFn: (body) => {
       return api.put("/user/profile", body, {
@@ -69,7 +68,6 @@ const Profile = () => {
     updateProfile.mutate(body, {
       onSuccess() {
         queryClient.invalidateQueries("PROFILE");
-        setIsShowSave(false);
         notification.success({ message: "Update successfully" });
       },
       onError() {
@@ -262,46 +260,40 @@ const Profile = () => {
             </p>
           </div>
           <div className="profile_information_content">
-            <Form
-              onChange={() => setIsShowSave(true)}
-              onFinish={onFinish}
-              form={form}
-              layout="vertical"
-            >
-              <Form.Item name="fullName" rules={[{ required: true }]}>
+            <Form onFinish={onFinish} form={form} layout="vertical">
+              <Form.Item
+                label="Full Name"
+                name="fullName"
+                rules={[{ required: true }]}
+              >
                 <Input />
               </Form.Item>
-              <Form.Item name="email">
+              <Form.Item label="Email" name="email">
                 <Input readOnly placeholder="Email" />
               </Form.Item>
-              <Form.Item name="gender">
-                <Select
-                  options={genderOptions}
-                  onChange={() => setIsShowSave(true)}
-                  placeholder="Gender"
-                />
+              <Form.Item label="Gender" name="gender">
+                <Select options={genderOptions} placeholder="Gender" />
               </Form.Item>
 
-              <Form.Item name="dob">
+              <Form.Item label="Birthday" name="dob">
                 <DatePicker
                   onChange={(_, dateString) => {
-                    setDob(dateString), setIsShowSave(true);
+                    setDob(dateString);
                   }}
                   placeholder="Birthday"
                 />
               </Form.Item>
-              <Form.Item name="about">
+              <Form.Item label="About you" name="about">
                 <Input.TextArea placeholder="About your self..." />
               </Form.Item>
               <Form.Item style={{ textAlign: "right" }}>
-                {isShowSave &&
-                  (updateProfile.isPending ? (
-                    <Button loading>Loading...</Button>
-                  ) : (
-                    <Button type="primary" htmlType="submit">
-                      Save
-                    </Button>
-                  ))}
+                {updateProfile.isPending ? (
+                  <Button loading>Loading...</Button>
+                ) : (
+                  <Button type="primary" htmlType="submit">
+                    Save
+                  </Button>
+                )}
               </Form.Item>
             </Form>
           </div>
