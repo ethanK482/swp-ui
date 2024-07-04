@@ -34,7 +34,7 @@ const SigninStyle = styled.div`
         text-align: right !important;
       }
     }
-    .ant-form-item-explain-error{
+    .ant-form-item-explain-error {
       text-align: left;
     }
     .ant-form-item-control-input-content {
@@ -56,7 +56,6 @@ const SigninStyle = styled.div`
       margin-bottom: 30px;
       button {
         width: 100%;
-        padding: 5px 0 !important;
         justify-content: center !important;
         font-size: 20px !important;
       }
