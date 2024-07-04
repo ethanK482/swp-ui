@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { ExclamationOutlined } from "@ant-design/icons";
 import ReportStyle from "./report.style";
 import { useMutation } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Button, Form, Input, Modal, notification } from "antd";
 
+// eslint-disable-next-line react/prop-types
 const Report = ({ resourceType, resourceId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = localStorage.getItem("token");
@@ -37,9 +38,7 @@ const Report = ({ resourceType, resourceId }) => {
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
+
 
   const handleCancel = () => {
     setIsModalOpen(false);

@@ -2,18 +2,15 @@ import useAllReport from "../../../hook/reports/useAllReport";
 import {
     Button,
     Table,
-    notification,
+ 
 } from "antd";
-import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation,  } from "@tanstack/react-query";
 import api from "../../../api/http";
 import { useNavigate } from 'react-router-dom';
-import { PENDING_RESOURCE } from "../../../common/constants";
 
 const ReportTab = () => {
     let reports = useAllReport();
     const navigate = useNavigate();
-    const [data, setData] = useState(reports);
     const token = localStorage.getItem("token");
     const pendingMutation = useMutation({
         mutationFn: ({resourceType, formData}) => {
