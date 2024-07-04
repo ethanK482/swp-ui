@@ -1,22 +1,11 @@
 import { Button, Form, Input, notification } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleLogin from "react-google-login";
-import { gapi } from "gapi-script";
-import { useEffect } from "react";
 import SigninStyle from "./Signin.style";
 import api from "../../api/http";
-const clientGoogleId =
-  "633795216418-nirmtba2ogtmj84i1om6mc7f8lhlkr4p.apps.googleusercontent.com";
+import LoginWithGoogleButton from "../../components/loginWithGoogle";
 const SignInScreen = () => {
   const navigate = useNavigate();
-  useEffect(() => {
-    gapi.load("client:auth2", () => {
-      gapi.client.init({
-        clientId: clientGoogleId,
-      });
-    });
-  });
 
   const formItemLayout = {
     labelCol: {
@@ -35,12 +24,6 @@ const SignInScreen = () => {
       return api.post("reverify", formData);
     },
   });
-  const socialLoginMutation = useMutation({
-    mutationFn: (formData) => {
-      return api.post("social", formData);
-    },
-  });
-
   const onfinish = (body) => {
     loginMutation.mutate(body, {
       onError(data) {
@@ -58,22 +41,6 @@ const SignInScreen = () => {
       },
     });
   };
-  const responseGoogle = (response) => {
-    const {
-      name,
-      googleId: sid,
-      imageUrl: picture,
-      email,
-    } = response.profileObj;
-    socialLoginMutation.mutate(
-      { name, sid, picture, email },
-      {
-        onError() {
-          notification.success({ message: "Can't login with google" });
-        },
-      }
-    );
-  };
 
   return (
     <SigninStyle>
@@ -82,13 +49,7 @@ const SignInScreen = () => {
         <div className="signup_content ">
           <span className="signup_content_title">Sign In</span>
           <div className="social mt-3">
-            <GoogleLogin
-              className="social_button"
-              buttonText="Continue with Google"
-              clientId={clientGoogleId}
-              onSuccess={responseGoogle}
-              onFailure={responseGoogle}
-            />
+            <LoginWithGoogleButton />
           </div>
           <span>Or Email</span>
           <Form
