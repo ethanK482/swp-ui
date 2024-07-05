@@ -44,12 +44,12 @@ const Document = () => {
       (flashcard) => flashcard.state === ACTIVE_RESOURCE
     );
     if (topicFilter) {
-      filteredDocuments = documents.filter(
+      filteredDocuments = filteredDocuments.filter(
         (document) => document.topicId == topicFilter
       );
     }
     if (search) {
-      filteredDocuments = documents.filter((document) =>
+      filteredDocuments = filteredDocuments.filter((document) =>
         document.title
           .toLowerCase()
           .trim()

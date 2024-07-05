@@ -11,12 +11,28 @@ import useToken from "../../../../hook/user/useToken";
 import useIsLogin from "../../../../hook/user/useIsLogin";
 import { useForm } from "antd/es/form/Form";
 const Comment = ({ comments, postId }) => {
+  //state
+  const [numberCommentShow, setNumberCommentShow] = useState(SHOW_COMMENT_NUM);
+  const [imageFile, setImageFile] = useState();
+  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
+  const [isShowEditModal, setIsShowEditModal] = useState(false);
+  const [deleteId, setDeleteId] = useState();
+  const [editComment, setEditComment] = useState();
+  const [editContent, setEditContent] = useState("");
+  //state
+  // get common
   const token = useToken();
   const isLogin = useIsLogin();
   const queryClient = useQueryClient();
-  const [numberCommentShow, setNumberCommentShow] = useState(SHOW_COMMENT_NUM);
-  const [imageFile, setImageFile] = useState();
+  const users = useAllUser();
+  const userInfo = useUserInfo();
+  const getUserById = (userId) => users?.find((user) => user.id == userId);
+  const isOwnerComment = (comment) => comment.userId == userInfo?.id;
+  const commentData = comments?.slice(0, numberCommentShow);
+  const [form] = useForm();
+  // get common
 
+  // onchange
   const handleChangeImage = (info) => {
     const file = info.files[0];
     if (!file.type.includes("image")) {
@@ -27,14 +43,37 @@ const Comment = ({ comments, postId }) => {
     }
   };
 
-  const commentData = comments.slice(0, numberCommentShow);
-  const users = useAllUser();
-  const userInfo = useUserInfo();
-  const getUserById = (userId) => users?.find((user) => user.id == userId);
-  const isOwnerComment = (comment) => comment.userId == userInfo?.id;
+  const handleCancelDeleteComment = () => {
+    setIsShowDeleteModal(false);
+  };
+  const handleCancelEditComment = () => {
+    setIsShowEditModal(false);
+  };
+
+  const handleSetDeleteComment = (id) => {
+    setDeleteId(id);
+    setIsShowDeleteModal(true);
+  };
+  const handleSetEditComment = (comment) => {
+    setEditComment(comment);
+    setIsShowEditModal(true);
+  };
+  // onchange
+
+  //mutation
   const commentMutation = useMutation({
     mutationFn: (formData) => {
       return api.post("/post/comment", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+      });
+    },
+  });
+  const editCommentMutation = useMutation({
+    mutationFn: ({ id, formData }) => {
+      return api.put(`/update-comment/${id}`, formData, {
         headers: {
           "content-type": "multipart/form-data",
           Authorization: token,
@@ -52,6 +91,9 @@ const Comment = ({ comments, postId }) => {
       });
     },
   });
+  //mutation
+
+  //call api
   const handleComment = ({ content }) => {
     const formData = new FormData();
     formData.append("content", content);
@@ -59,50 +101,56 @@ const Comment = ({ comments, postId }) => {
     formData.append("postId", postId);
     commentMutation.mutate(formData, {
       onSuccess() {
+        setImageFile(undefined);
         queryClient.invalidateQueries("posts");
+        queryClient.invalidateQueries("myposts");
       },
     });
   };
-  const [form] = useForm();
-  const [isShowDeleteModal, setIsShowDeleteModal] = useState(false);
-  const [isShowEditModal, setIsShowEditModal] = useState(false);
-  const [deleteId, setDeleteId] = useState();
-  const [editComment, setEditComment] = useState();
-  useEffect(() => {
-    form.setFieldsValue(editComment);
-  }, [editComment]);
   const handleDeleteComment = () => {
     deleteCommentMutation.mutate(
       { commentId: deleteId },
       {
         onSuccess() {
           queryClient.invalidateQueries("posts");
+          queryClient.invalidateQueries("myposts");
         },
       }
     );
     setIsShowDeleteModal(false);
   };
-  const handleCancelDeleteComment = () => {
-    setIsShowDeleteModal(false);
-  };
-  const handleCancelEditComment = () => {
-    setIsShowEditModal(false);
+  const handleEditComment = () => {
+    const formData = new FormData();
+    formData.append("content", editContent);
+    formData.append("file", imageFile);
+    formData.append("postId", postId);
+    editCommentMutation.mutate(
+      { id: editComment.id, formData },
+      {
+        onSuccess() {
+          setIsShowEditModal(false);
+          setImageFile(undefined);
+          queryClient.invalidateQueries("posts");
+          queryClient.invalidateQueries("myposts");
+        },
+      }
+    );
   };
 
-  const handleSetDeleteComment = (id) => {
-    setDeleteId(id);
-    setIsShowDeleteModal(true);
-  };
-  const handleSetEditComment = (comment) => {
-    setEditComment(comment);
-    setIsShowEditModal(true);
-  };
+  //call api
+
+  //effect
+  useEffect(() => {
+    form.setFieldsValue(editComment);
+  }, [editComment, form]);
+  //effect
+
   return (
     <section className="bg-white  py-8 lg:py-16 antialiased">
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-lg lg:text-2xl font-bold text-gray-900 ">
-            Discussion (20)
+            Discussion ({comments?.length})
           </h2>
         </div>
         {isLogin && (
@@ -127,7 +175,7 @@ const Comment = ({ comments, postId }) => {
             </Form.Item>
           </Form>
         )}
-        {commentData.map((comment) => {
+        {commentData?.map((comment) => {
           const { fullName, avatarUrl } = getUserById(comment.userId);
           return (
             <article
@@ -170,7 +218,7 @@ const Comment = ({ comments, postId }) => {
             </article>
           );
         })}
-        {comments.length > SHOW_COMMENT_NUM && (
+        {comments?.length > SHOW_COMMENT_NUM && (
           <div className="flex justify-end">
             {numberCommentShow == SHOW_COMMENT_NUM ? (
               <button
@@ -202,13 +250,13 @@ const Comment = ({ comments, postId }) => {
       <Modal
         title="Edit Comment"
         open={isShowEditModal}
-        onOk={handleDeleteComment}
-        confirmLoading={deleteCommentMutation.isPending}
+        onOk={handleEditComment}
+        confirmLoading={editCommentMutation.isPending}
         onCancel={handleCancelEditComment}
       >
         <Form form={form} layout="vertical">
           <Form.Item name="content" rules={[{ required: true }]}>
-            <Input.TextArea />
+            <Input.TextArea onChange={(e) => setEditContent(e.target.value)} />
           </Form.Item>
           <Form.Item label="Image">
             <Input onChange={(e) => handleChangeImage(e.target)} type="file" />

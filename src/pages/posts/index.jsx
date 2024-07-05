@@ -73,7 +73,7 @@ const PostScreen = () => {
             <Post
               key={post.id}
               post={post}
-              author={getAuthorByUserId(post.user_id)}
+              author={getAuthorByUserId(post.userId)}
             />
           ))}
         </div>

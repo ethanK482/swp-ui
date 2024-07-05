@@ -48,12 +48,12 @@ const FlashcardScreen = () => {
       (flashcard) => flashcard.state === ACTIVE_RESOURCE
     );
     if (topicFilter) {
-      filteredFlashcards = flashcards.filter(
+      filteredFlashcards = filteredFlashcards.filter(
         (document) => document.topicId == topicFilter
       );
     }
     if (search) {
-      filteredFlashcards = flashcards.filter((flashcard) =>
+      filteredFlashcards = filteredFlashcards.filter((flashcard) =>
         flashcard.name
           .toLowerCase()
           .trim()

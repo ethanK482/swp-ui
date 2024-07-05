@@ -14,7 +14,6 @@ const LoginWithGoogleButton = () => {
   const loginWithGoogle = async () => {
     const { user } = await signInWithPopup(auth, GoogleProvider);
     const { displayName: name, uid: sid, photoURL: picture, email } = user;
-    console.log(user);
     socialLoginMutation.mutate(
       { name, sid, picture, email },
       {

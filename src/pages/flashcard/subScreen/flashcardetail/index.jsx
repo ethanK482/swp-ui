@@ -2,7 +2,6 @@ import { FlashcardArray } from "react-quizlet-flashcard";
 import { useParams } from "react-router-dom";
 import useAllFlashCard from "../../../../hook/flashcard/useAllFlashCard";
 import FlashcardDetailStyle from "./FlashcardDetailStyle";
-import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../../api/http";
 import {
@@ -24,6 +23,10 @@ import {
   PlusCircleOutlined,
   MinusCircleOutlined,
   PlusOutlined,
+  LikeOutlined,
+  DislikeOutlined,
+  LikeFilled,
+  DislikeFilled,
 } from "@ant-design/icons";
 import { useState } from "react";
 import { loginRequire } from "../../../../common/protectRoute";
@@ -58,6 +61,12 @@ const FlashCardDetailScreen = () => {
     activeFlashcard?.reviews
   );
   const isAuthor = activeFlashcard?.userId == user?.id;
+  const isLike = activeFlashcard?.reviews.some((review) => {
+    return review.userId == user.id && review.state == "helpful";
+  });
+  const isDisLike = activeFlashcard?.reviews.some((review) => {
+    return review.userId == user.id && review.state == "unhelpful";
+  });
   const renderCard = () => {
     const questions = activeFlashcard?.questions;
 
@@ -107,7 +116,6 @@ const FlashCardDetailScreen = () => {
   const onSubmitUpdate = (body) => {
     updateFlashCard.mutate(body, {
       onSuccess() {
-
         notification.success({ message: "Successfully" });
         queryClient.invalidateQueries("flashcards");
         setIsViewModal(false);
@@ -123,7 +131,10 @@ const FlashCardDetailScreen = () => {
         <div className="justify-start gap-10 py-5 pl-5 bg-[#323639] text-[#fff] fixed top-[63px] left-0 right-0  z-10  ">
           <div className="flex justify-between ">
             <p className="font-bold text-sm">{topicName}</p>
-            <Report resourceType={"flashcard"} resourceId={activeFlashcard?.id} />
+            <Report
+              resourceType={"flashcard"}
+              resourceId={activeFlashcard?.id}
+            />
           </div>
           <div className="flex justify-between ">
             <p className="font-bold text-xl">{activeFlashcard?.name}</p>
@@ -142,7 +153,7 @@ const FlashCardDetailScreen = () => {
             onClick={() => handleReview("helpful")}
             className="hover:opacity-[0.4]"
             style={{ cursor: "pointer" }}
-            icon={<LikeOutlined />}
+            icon={isLike ? <LikeFilled /> : <LikeOutlined />}
             color="green"
           >
             {totalHelpful}
@@ -151,12 +162,11 @@ const FlashCardDetailScreen = () => {
             onClick={() => handleReview("unhelpful")}
             className="hover:opacity-[0.4]"
             style={{ cursor: "pointer" }}
-            icon={<DislikeOutlined />}
+            icon={isDisLike ? <DislikeFilled /> : <DislikeOutlined />}
             color="warning"
           >
             {totalUnhelpful}{" "}
           </Tag>
-
         </div>
         {activeFlashcard && <FlashcardArray cards={renderCard()} />}
       </div>
@@ -183,7 +193,6 @@ const FlashCardDetailScreen = () => {
             open={isViewModal}
             onCancel={() => setIsViewModal(false)}
           >
-
             <Form
               initialValues={activeFlashcard}
               onFinish={onSubmitUpdate}
@@ -193,7 +202,6 @@ const FlashCardDetailScreen = () => {
                 <Input />
               </Form.Item>
 
-
               <Form.Item
                 name="topicId"
                 label="Topic"
@@ -201,64 +209,59 @@ const FlashCardDetailScreen = () => {
               >
                 <Select placeholder="Select topic" options={topicOptions()} />
               </Form.Item>
-              <>
-                <Form.List name="questions">
-                  {(fields, { add, remove }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <Space
-                          key={key}
-                          style={{
-                            display: "flex",
-                            marginBottom: 8,
-                            justifyContent: "space-around",
-                          }}
-                          align="baseline"
+              <Form.List name="questions">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{
+                          display: "flex",
+                          marginBottom: 8,
+                          justifyContent: "space-around",
+                        }}
+                        align="baseline"
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "question"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Missing first question",
+                            },
+                          ]}
                         >
-                          <Form.Item
-                            {...restField}
-                            name={[name, "question"]}
-                            rules={[
-
-                              {
-                                required: true,
-                                message: "Missing first question",
-                              },
-                            ]}
-                          >
-                            <Input.TextArea placeholder="question" />
-                          </Form.Item>
-                          <Form.Item
-                            {...restField}
-                            name={[name, "answer"]}
-                            rules={[
-
-                              {
-                                required: true,
-                                message: "Missing last answer",
-                              },
-
-                            ]}
-                          >
-                            <Input.TextArea placeholder="Answer" />
-                          </Form.Item>
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </Space>
-                      ))}
-                      <Form.Item>
-                        <Button
-                          type="dashed"
-                          onClick={() => add()}
-                          block
-                          icon={<PlusOutlined />}
+                          <Input.TextArea placeholder="question" />
+                        </Form.Item>
+                        <Form.Item
+                          {...restField}
+                          name={[name, "answer"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Missing last answer",
+                            },
+                          ]}
                         >
-                          Add flashcard
-                        </Button>
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </>
+                          <Input.TextArea placeholder="Answer" />
+                        </Form.Item>
+                        <MinusCircleOutlined onClick={() => remove(name)} />
+                      </Space>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add flashcard
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
               <Form.Item
                 name="description"
                 label="Description"

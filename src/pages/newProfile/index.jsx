@@ -29,6 +29,7 @@ import {
   EXPERT_MARK_DEMAND,
   USER,
 } from "../../common/constants";
+import MyPost from "./components/myPost";
 const Profile = () => {
   const role = localStorage.getItem("role");
   const queryClient = useQueryClient();
@@ -237,7 +238,7 @@ const Profile = () => {
               }
             </Popover>
           </div>
-          {user?.balance && (
+          {!!user?.balance && (
             <Tag color="gold" className="mt-2">
               {" "}
               Balance: {Number(user.balance).toLocaleString()}đ
@@ -302,6 +303,7 @@ const Profile = () => {
       <MyLearning />
       <MyFlashCard />
       <MyDocument />
+      <MyPost />
       <Modal
         title="Update avatar ?"
         open={isModalOpen}

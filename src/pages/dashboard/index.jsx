@@ -6,7 +6,7 @@ import {
   TagsFilled,
   ReadFilled,
   UserOutlined,
-  ExclamationCircleFilled
+  ExclamationCircleFilled,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import DashboardStyle from "./Dashboard.style";
@@ -16,6 +16,7 @@ import { useState } from "react";
 import ListUser from "./tab/ListUser.jsx";
 import ListPendingFlashcard from "./tab/ListPendingFlashcard.jsx";
 import ListPendingCourse from "./tab/ListPendingCourse.jsx";
+import { adminRequire } from "../../common/adminRequire.js";
 const items = [
   { key: "1", icon: <ExclamationCircleFilled />, label: "List Report" },
   { key: "2", icon: <FileWordFilled />, label: "List Pending Documents" },
@@ -60,8 +61,7 @@ const items = [
   },
 ];
 const Dashboard = () => {
-  const userRole = localStorage.getItem("role");
-  if (userRole !== "ADMIN") window.location.replace("/");
+  adminRequire();
   const [selectedKey, setSelectedKey] = useState("1");
   const handleClick = (e) => {
     setSelectedKey(e.key);
@@ -71,13 +71,13 @@ const Dashboard = () => {
       case "1":
         return <ReportTab />;
       case "2":
-        return <ListPendingDocument/>
-        case "3":
-        return <ListPendingCourse/>
-        case "4":
-        return <ListPendingFlashcard/>
-        case "5":
-        return <ListUser/>
+        return <ListPendingDocument />;
+      case "3":
+        return <ListPendingCourse />;
+      case "4":
+        return <ListPendingFlashcard />;
+      case "5":
+        return <ListUser />;
       default:
         return <div>Default Content</div>;
     }
@@ -95,7 +95,7 @@ const Dashboard = () => {
             items={items}
           />
         </div>
-       <div className="dashboard_tab ">{renderTab()}</div>
+        <div className="dashboard_tab ">{renderTab()}</div>
       </div>
     </DashboardStyle>
   );

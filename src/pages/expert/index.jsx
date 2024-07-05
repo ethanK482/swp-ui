@@ -1,18 +1,16 @@
-import {
-  ContainerOutlined,
-  DesktopOutlined,
-  PieChartOutlined,
-} from "@ant-design/icons";
+import { DesktopOutlined, PieChartOutlined } from "@ant-design/icons";
 import { Menu } from "antd";
 import DashboardStyle from "../dashboard/Dashboard.style";
 import { useState } from "react";
 import CreateTab from "./tab/CreateTab";
 import ListCourseTab from "./tab/ListcourseTab.jsx";
+import { expertRequire } from "../../common/expertRequire.js";
 const items = [
   { key: "1", icon: <PieChartOutlined />, label: "Create course" },
   { key: "2", icon: <DesktopOutlined />, label: "List course" },
 ];
 const ExpertDashboard = () => {
+  expertRequire();
   const [selectedKey, setSelectedKey] = useState("1");
   const handleClick = (e) => {
     setSelectedKey(e.key);

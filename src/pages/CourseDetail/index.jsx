@@ -10,9 +10,10 @@ import useAllUser from "../../hook/user/useAllUser";
 import CreateReview from "../newProfile/components/myLearning/CreateReview";
 import calculateRating from "../../helpers/CalculateRating";
 import { FaStar } from "react-icons/fa";
+import useToken from "../../hook/user/useToken";
 const CourseDetail = () => {
   const { id } = useParams();
-  const token = localStorage.getItem("token");
+  const token = useToken();
   const buyMutation = useMutation({
     mutationFn: (body) => {
       return api.post("/payment", body, {

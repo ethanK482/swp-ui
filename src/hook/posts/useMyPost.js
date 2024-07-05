@@ -1,17 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 
-const useAllStudent = (courseId) => {
+const useMyPost = () => {
   const token = localStorage.getItem("token");
   return useQuery({
-    queryKey: ["STUDENTS"],
+    queryKey: ["myposts"],
     queryFn: () =>
-      api.get(`/course/students?courseId=${courseId}`, {
+      api.get("/myposts", {
         headers: {
           Authorization: token,
         },
       }),
-    enabled: !!courseId,
-  });
+  })?.data?.data;
 };
-export default useAllStudent;
+export default useMyPost;

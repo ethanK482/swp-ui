@@ -19,6 +19,7 @@ import DocumentDetail from "../pages/documents/subScreens/documentDetail";
 import FlashcardScreen from "../pages/flashcard";
 import FlashCardDetailScreen from "../pages/flashcard/subScreen/flashcardetail";
 import PostScreen from "../pages/posts";
+import PostDetail from "../pages/posts/components/postDetail";
 const RouterManagement = () => {
   return (
     <Routes>
@@ -42,13 +43,13 @@ const RouterManagement = () => {
         <Route path="/learn/:id" element={<CourseBought />}></Route>
         <Route path="/payment/result" element={<PaymentResult />}></Route>
         <Route path="/document/detail/:id" element={<DocumentDetail />}></Route>
+        <Route path="/post/detail/:id" element={<PostDetail />}></Route>
         <Route path="/flashcards" element={<FlashcardScreen />}></Route>
         <Route
           path="/flashcard/detail/:id"
           element={<FlashCardDetailScreen />}
         ></Route>
-          <Route path="/forum" element={<PostScreen />}></Route>
-        
+        <Route path="/forum" element={<PostScreen />}></Route>
       </Route>
     </Routes>
   );
