@@ -15,6 +15,7 @@ import ListUser from "./tab/ListUser.jsx";
 import ListPendingFlashcard from "./tab/ListPendingFlashcard.jsx";
 import ListPendingCourse from "./tab/ListPendingCourse.jsx";
 import { adminRequire } from "../../common/adminRequire.js";
+import ExpertRequest from "./tab/ExpertRequest.jsx";
 const items = [
   { key: "1", icon: <UserOutlined />, label: "Platform statistics" },
   { key: "2", icon: <ExclamationCircleFilled />, label: "List Report" },
@@ -46,6 +47,8 @@ const Dashboard = () => {
 
       case "5":
         return <ListPendingFlashcard />;
+      case "7":
+        return <ExpertRequest />;
       default:
         return <div>Default Content</div>;
     }

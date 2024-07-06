@@ -86,8 +86,49 @@ const Profile = () => {
       });
     },
   });
-
+  const sendExpertRequest = useMutation({
+    mutationFn: (formData) => {
+      return api.post("/expert-request", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          Authorization: token,
+        },
+      });
+    },
+  });
+  const [files, setFiles] = useState(null);
+  const handleChangeCV = (info) => {
+    const file = info.files[0];
+    if (!file.name.includes("pdf")) {
+      notification.error({ message: "CV must be pdf file" });
+      setFiles(null);
+    } else {
+      setFiles(info.files);
+    }
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isShowExertRequest, setIsShowExertRequest] = useState(false);
+  const handleCancelRequestModal = () => {
+    setIsShowExertRequest(false);
+  };
+  const handleSendRequest = () => {
+    const formData = new FormData();
+    formData.append("cv", files[0]);
+    sendExpertRequest.mutate(formData, {
+      onSuccess() {
+        queryClient.invalidateQueries("documents");
+        notification.success({
+          message:
+            "Upload successfully, We will respond via your email within 2 days at the latest.",
+        });
+        setIsShowExertRequest(false);
+        setFiles(null);
+      },
+      onError(data) {
+        notification.error({ message: data.response.data.message });
+      },
+    });
+  };
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -244,6 +285,17 @@ const Profile = () => {
               Balance: {Number(user.balance).toLocaleString()}đ
             </Tag>
           )}
+          {user?.legitMark >= EXPERT_MARK_DEMAND &&
+            user?.role != EXPERT &&
+            user?.role != ADMIN && (
+              <Button
+                onClick={() => setIsShowExertRequest(true)}
+                type="primary"
+                className="mt-3"
+              >
+                Apply to be Platform Expert
+              </Button>
+            )}
           <div>
             <Menu
               onClick={menuOnclick}
@@ -317,6 +369,20 @@ const Profile = () => {
           type="file"
           placeholder="Choose avatar"
         />
+      </Modal>
+      <Modal
+        title="Update user state"
+        open={isShowExertRequest}
+        onCancel={handleCancelRequestModal}
+        onOk={handleSendRequest}
+        confirmLoading={sendExpertRequest.isPending}
+      >
+        <Form.Item label="Upload your cv" rules={[{ required: true }]}>
+          <input type="file" onChange={(e) => handleChangeCV(e.target)} />
+        </Form.Item>
+        <p className="text-[orange]">
+          If your request is pending, please do not resubmit
+        </p>
       </Modal>
     </ProfileStyle>
   );
