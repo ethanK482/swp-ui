@@ -191,7 +191,7 @@ const ListCourseTab = () => {
       id: course.id,
       price: course.price,
       name: course.name,
-      banner: <Avatar shape="square" size={100} src={course.banner_url} />,
+      banner: <Avatar shape="square" size={100} src={course.bannerUrl} />,
       topic: getTopicName(course.topicId),
       state: (
         <Tag color={course.state === "pending" ? "gold" : "green"}>
@@ -309,8 +309,8 @@ const ListCourseTab = () => {
               <Card type="inner" title="Update new lesson">
                 <span>
                   {" "}
-                  Example file name: {lesson.lesson_order}-filename.mp4
-                  (Maximum: 20MB size)
+                  Example file name: {lesson.lessonOrder}-filename.mp4 (Maximum:
+                  20MB size)
                 </span>
                 {updateLesson.isPending ? (
                   <Button loading>Wait for upload video</Button>

@@ -1,12 +1,13 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { ExclamationOutlined } from "@ant-design/icons";
 import ReportStyle from "./report.style";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../api/http";
 import { Button, Form, Input, Modal, notification } from "antd";
 
 // eslint-disable-next-line react/prop-types
 const Report = ({ resourceType, resourceId }) => {
+  const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const token = localStorage.getItem("token");
   const uploadReport = useMutation({
@@ -29,7 +30,7 @@ const Report = ({ resourceType, resourceId }) => {
       onSuccess() {
         notification.success({ message: "Upload Report successfully" });
         setIsModalOpen(false);
-
+        queryClient.invalidateQueries("reports");
       },
     });
   };
@@ -37,8 +38,6 @@ const Report = ({ resourceType, resourceId }) => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-
-
 
   const handleCancel = () => {
     setIsModalOpen(false);

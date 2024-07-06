@@ -29,7 +29,7 @@ const CourseBought = () => {
         className="course-detail_content__lessons__item hover:bg-slate-300 font-bold"
       >
         <p className="ml-3">
-          {lesson?.lesson_order}. {lesson?.name}{" "}
+          {lesson?.lessonOrder}. {lesson?.name}{" "}
         </p>
       </div>
     );
@@ -48,7 +48,7 @@ const CourseBought = () => {
           }}
           className="ml-3 hover:text-[#7F00FF] cursor-pointer"
         >
-          {lesson?.lesson_order}. {lesson?.name}{" "}
+          {lesson?.lessonOrder}. {lesson?.name}{" "}
         </p>
       </div>
     );
@@ -61,7 +61,6 @@ const CourseBought = () => {
           <div className="course-detail_banner__info">
             <h1 className="course-detail_banner__info___title mb-3">
               {course?.name}
-              
             </h1>
             <div className="flex items-center mb-2">
               {" "}
@@ -81,14 +80,12 @@ const CourseBought = () => {
             <p className="text-white text-sm ">
               Last updated{" "}
               <span className="text-sky-400">
-                {new Date(course?.updated_at)?.getMonth() +
+                {new Date(course?.updatedAt)?.getMonth() +
                   1 +
                   "/" +
-                  new Date(course?.updated_at)?.getFullYear()}
+                  new Date(course?.updatedAt)?.getFullYear()}
               </span>
-              
             </p>
-            
           </div>
           <div className="flex justify-between">
             <Card
@@ -96,7 +93,7 @@ const CourseBought = () => {
               cover={
                 <img
                   alt={course?.name}
-                  src={course?.banner_url}
+                  src={course?.bannerUrl}
                   style={{
                     width: "100%",
                     height: "152px",
@@ -105,11 +102,9 @@ const CourseBought = () => {
                 />
               }
             ></Card>
-            <Report resourceType={"course"} resourceId={course?.id}/>
+            <Report resourceType={"course"} resourceId={course?.id} />
           </div>
-          
         </div>
-        
 
         <div className="course-detail_content">
           <div className="course-detail_content__lessons">
@@ -126,7 +121,7 @@ const CourseBought = () => {
         </div>
         <Modal
           width={"80%"}
-          title={`${activeLesson?.lesson_order}.${activeLesson?.name}`}
+          title={`${activeLesson?.lessonOrder}.${activeLesson?.name}`}
           open={isView}
           onCancel={() => setIsView(false)}
           footer=""

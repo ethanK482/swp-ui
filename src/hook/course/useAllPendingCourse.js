@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../api/http";
 
-const useAllReport = () => {
+const useAllPendingCourse = () => {
   const token = localStorage.getItem("token");
   return useQuery({
-    queryKey: ["reports"],
+    queryKey: ["PENDING_COURSE"],
     queryFn: () =>
-      api.get("/reports", {
+      api.get("/course/pending", {
         headers: {
           Authorization: token,
         },
@@ -16,4 +16,4 @@ const useAllReport = () => {
     refetchOnWindowFocus: false,
   })?.data?.data;
 };
-export default useAllReport;
+export default useAllPendingCourse;

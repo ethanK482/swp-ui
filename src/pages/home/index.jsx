@@ -11,99 +11,106 @@ import FlashCard from "../flashcard/components/FlashCard";
 import { Link } from "react-router-dom";
 import Landing from "../../components/LoginNeed";
 import Loading from "../../components/loading";
+import { ACTIVE_RESOURCE } from "../../common/constants";
 const HomePage = () => {
   const user = useUserInfo();
-  const {courses} = useAllPublicCourse();
+  const { courses } = useAllPublicCourse();
   const experts = useAllUser();
-  const documents = useAllDocuments();
-  const flashcards = useAllFlashCard();
+  const documents = useAllDocuments()?.filter(
+    (document) => document.state == ACTIVE_RESOURCE
+  );
+  const flashcards = useAllFlashCard()?.filter(
+    (flashCard) => flashCard.state == ACTIVE_RESOURCE
+  );
   const findExpertById = (id) => {
     return experts?.find((expert) => expert.id == id);
   };
   const isDataReady = courses && experts && documents && flashcards;
   return (
-    
     <HomePageStyle>
-      { isDataReady && !user && <Landing/>}
-      {!isDataReady ?<Loading/> : <div className="home-page">
-        <div className="p-5 relative">
-          <p className="text-3xl font-bold">Courses</p>
-          <Row gutter={[16, 40]} className="pt-[10px]">
-            {courses?.slice(0, 4).map((course) => {
-              return (
-                <Col
-                  key={course.id}
-                  className="gutter-row"
-                  xs={24}
-                  sm={12}
-                  md={6}
-                >
-                  <CourseCard
-                    expert={findExpertById(course.expertId)}
-                    course={course}
-                  />
-                </Col>
-              );
-            })}
-          </Row>
-          <Link
-            className="absolute right-0 bottom-[-10px] text-[blue] hover:opacity-[0.4]"
-            to={"/courses"}
-          >
-            View all &rarr;
-          </Link>
-        </div>
-        <div className="p-5  relative">
-        <p className="text-3xl font-bold">Documents</p>
-          <Row gutter={[16, 40]} className="pt-[10px] ">
-            {documents?.slice(0, 4).map((document) => {
-              return (
-                <Col
-                  key={document.id}
-                  className="gutter-row"
-                  xs={24}
-                  sm={12}
-                  md={6}
-                >
-                  <DocumentCard document={document} />
-                </Col>
-              );
-            })}
-          </Row>
-          <Link
-            className="absolute right-0 bottom-[-10px] text-[blue] hover:opacity-[0.4]"
-            to={"/documents"}
-          >
-            View all &rarr;
-          </Link>
-        </div>
+      {isDataReady && !user && <Landing />}
+      {!isDataReady ? (
+        <Loading />
+      ) : (
+        <div className="home-page">
+          <div className="p-5 relative">
+            <p className="text-3xl font-bold">Courses</p>
+            <Row gutter={[16, 40]} className="pt-[10px]">
+              {courses?.slice(0, 4).map((course) => {
+                return (
+                  <Col
+                    key={course.id}
+                    className="gutter-row"
+                    xs={24}
+                    sm={12}
+                    md={6}
+                  >
+                    <CourseCard
+                      expert={findExpertById(course.expertId)}
+                      course={course}
+                    />
+                  </Col>
+                );
+              })}
+            </Row>
+            <Link
+              className="absolute right-0 bottom-[-10px] text-[blue] hover:opacity-[0.4]"
+              to={"/courses"}
+            >
+              View all &rarr;
+            </Link>
+          </div>
+          <div className="p-5  relative">
+            <p className="text-3xl font-bold">Documents</p>
+            <Row gutter={[16, 40]} className="pt-[10px] ">
+              {documents?.slice(0, 4).map((document) => {
+                return (
+                  <Col
+                    key={document.id}
+                    className="gutter-row"
+                    xs={24}
+                    sm={12}
+                    md={6}
+                  >
+                    <DocumentCard document={document} />
+                  </Col>
+                );
+              })}
+            </Row>
+            <Link
+              className="absolute right-0 bottom-[-10px] text-[blue] hover:opacity-[0.4]"
+              to={"/documents"}
+            >
+              View all &rarr;
+            </Link>
+          </div>
 
-        <div className="p-5  relative">
-        <p className="text-3xl font-bold">Flashcards</p>
-          <Row gutter={[16, 40]} className="pt-[10px]">
-            {flashcards?.slice(0, 4).map((flashcard) => {
-              return (
-                <Col
-                  key={document.id}
-                  className="gutter-row"
-                  xs={24}
-                  sm={12}
-                  md={6}
-                >
-                  <FlashCard flashcard={flashcard} />
-                </Col>
-              );
-            })}
-          </Row>
-          <Link
-             className="absolute right-0 bottom-[-2px] text-[blue] hover:opacity-[0.4]"
-            to={"/flashcards"}
-          >
-            View all &rarr;
-          </Link>
+          <div className="p-5  relative">
+            <p className="text-3xl font-bold">Flashcards</p>
+            <Row gutter={[16, 40]} className="pt-[10px]">
+              {flashcards?.slice(0, 4).map((flashcard) => {
+                return (
+                  <Col
+                    key={document.id}
+                    className="gutter-row"
+                    xs={24}
+                    sm={12}
+                    md={6}
+                  >
+                    <FlashCard flashcard={flashcard} />
+                  </Col>
+                );
+              })}
+            </Row>
+            <Link
+              className="absolute right-0 bottom-[-2px] text-[blue] hover:opacity-[0.4]"
+              to={"/flashcards"}
+            >
+              View all &rarr;
+            </Link>
+          </div>
         </div>
-      </div>}
-      
+      )}
     </HomePageStyle>
   );
 };

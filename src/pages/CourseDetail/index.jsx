@@ -41,7 +41,7 @@ const CourseDetail = () => {
           className="course-detail_content__lessons__item hover:bg-slate-300 font-bold"
         >
           <p className="ml-3">
-            {course?.lesson_order}. {course?.name}{" "}
+            {course?.lessonOrder}. {course?.name}{" "}
             <span style={{ color: "#7F00FF", fontSize: "14px" }}>Preview</span>
           </p>
         </div>
@@ -50,7 +50,7 @@ const CourseDetail = () => {
     return (
       <div key={i} className="course-detail_content__lessons__item font-bold">
         <p className="ml-3">
-          {course?.lesson_order}. {course?.name}
+          {course?.lessonOrder}. {course?.name}
         </p>
       </div>
     );
@@ -96,10 +96,10 @@ const CourseDetail = () => {
             <p className="text-white text-sm ">
               Last updated{" "}
               <span className="text-sky-400">
-                {new Date(course?.updated_at)?.getMonth() +
+                {new Date(course?.updatedAt)?.getMonth() +
                   1 +
                   "/" +
-                  new Date(course?.updated_at)?.getFullYear()}
+                  new Date(course?.updatedAt)?.getFullYear()}
               </span>
             </p>
           </div>
@@ -109,7 +109,7 @@ const CourseDetail = () => {
               cover={
                 <img
                   alt={course?.name}
-                  src={course?.banner_url}
+                  src={course?.bannerUrl}
                   style={{
                     width: "100%",
                     height: "152px",
@@ -168,7 +168,7 @@ const CourseDetail = () => {
             cover={
               <img
                 alt={course?.name}
-                src={course?.banner_url}
+                src={course?.bannerUrl}
                 style={{
                   width: "100%",
                   height: "152px",

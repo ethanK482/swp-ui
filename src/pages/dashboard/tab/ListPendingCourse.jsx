@@ -1,98 +1,191 @@
-import useAllPublicCourse from "../../../hook/course/useAllUserCourse";
-//import useAllExpertCourse from "../../../hook/course/useAllExpertCourse";
-
-import {
-    Button,
-    Table,
- 
-} from "antd";
-import { useMutation,  } from "@tanstack/react-query";
+import { Avatar, Button, Card, Modal, Table, Tag, notification } from "antd";
+import { useEffect, useState } from "react";
+import useAllTopic from "../../../hook/topic/useAllTopic";
+import VideoPlayer from "../../expert/conponents/Video";
+import useAllPendingCourse from "../../../hook/course/useAllPendingCourse";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../api/http";
-import { useNavigate } from 'react-router-dom';
-
-const ListPendingCourse = () => {
-    const courses = useAllPublicCourse();
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token");
-    const activeMutation = useMutation({
-        mutationFn: ({ formData}) => {
-            return api.put(`/course/acitve`, formData, {
-                headers: {
-                    "content-type": "multipart/form-data",
-                    Authorization: token,
-                },
-            });
-        },
+import useToken from "../../../hook/user/useToken";
+import useAllUser from "../../../hook/user/useAllUser";
+const ListCourseTab = () => {
+  const queryClient = useQueryClient();
+  const token = useToken();
+  let courses = useAllPendingCourse();
+  const [course, setCourse] = useState();
+  const [activeId, setActiveId] = useState();
+  const [isShowActiveModal, setIsShowActiveModal] = useState(false);
+  const users = useAllUser();
+  const findUserEmailById = (userId) => {
+    return users?.find((user) => user.id == userId)?.email;
+  };
+  const handleCancel = () => {
+    setIsShowActiveModal(false);
+    setActiveId(undefined);
+  };
+  useEffect(() => {
+    const newCourse = courses?.find((i) => i.id == course?.id);
+    setCourse(newCourse);
+  }, [courses, course?.id]);
+  const topics = useAllTopic();
+  const getTopicName = (id) => {
+    return topics.find((i) => i.id == id)?.name;
+  };
+  const activeMutation = useMutation({
+    mutationFn: (id) => {
+      return api.put(
+        `/course/active/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+    },
+  });
+  const handleActiveCourse = () => {
+    activeMutation.mutate(activeId, {
+      onSuccess() {
+        setIsShowActiveModal(false);
+        setActiveId(undefined);
+        notification.success({ message: "Successfully" });
+        queryClient.invalidateQueries("PENDING_COURSE");
+        queryClient.invalidateQueries("PUBLIC_COURSE");
+      },
     });
+  };
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+    },
+    {
+      title: "Expert",
+      dataIndex: "expert",
+      key: "expert",
+    },
+    {
+      title: "Price (VND)",
+      dataIndex: "price",
+      key: "price",
+    },
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
 
-    const handleActive = (courseId) => {
-        const formData = new FormData();
-        formData.append("courseId", courseId + "");
-        activeMutation.mutate({formData });
+    {
+      title: "Banner",
+      dataIndex: "banner",
+      key: "banner",
+    },
+    {
+      title: "Topic",
+      dataIndex: "topic",
+      key: "topic",
+    },
+    {
+      title: "State",
+      dataIndex: "state",
+      key: "state",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      key: "action",
+    },
+  ];
+  const handleOpenActiveModal = (courseId) => {
+    setIsShowActiveModal(true);
+    setActiveId(courseId);
+  };
+  const data = courses?.map((course) => {
+    return {
+      key: course.id,
+      id: course.id,
+      expert: findUserEmailById(course.expertId),
+      price: course.price,
+      name: course.name,
+      banner: <Avatar shape="square" size={100} src={course.bannerUrl} />,
+      topic: getTopicName(course.topicId),
+      state: (
+        <Tag color={course.state === "pending" ? "gold" : "green"}>
+          {course.state}
+        </Tag>
+      ),
+      action: (
+        <>
+          <Button onClick={() => setCourse(course)} style={{ color: "blue" }}>
+            Detail
+          </Button>
+          <Button
+            onClick={() => handleOpenActiveModal(course.id)}
+            loading={activeMutation.isPending}
+            style={{ color: "blue" }}
+          >
+            Active
+          </Button>
+        </>
+      ),
     };
-    const pendingCourses = courses?.filter(course => course.state === "pending");
+  });
+  const gridStyle = {
+    width: "33.333%",
+    textAlign: "center",
+  };
 
-    const dataSource = pendingCourses?.map((course) => {
-        return {
-    
-            courseName: course.name,
-            courseId: course.id,
-            topic:course.topicId,
-            descriptions: course.description ,
-            action: (
-                <>
-                    <Button
-                        className="mr-2"
-                        style={{ color: "blue" }}
-                        onClick={() => handleActive(course.id)}
-                    >
-                        Active
-                    </Button>
-                    <Button onClick={() => navigate(`/course/detail/${course.id}`)}>
-                        Detail
-                    </Button>
-                </>
-            ),
-        };
-    });
-   
-    const columns = [
-        {
-            title: 'CoursedName',
-            dataIndex: 'coursedName',
-            key: 'coursedName',
-        },
-        {
-            title: 'CourseId',
-            dataIndex: 'courseId',
-            key: 'courseId',
-        },
-        {
-            title: 'Topic',
-            dataIndex: 'topic',
-            key: 'topic',
-        },
-        {
-            title: 'Descriptions',
-            dataIndex: 'descriptions',
-            key: 'descriptions',
-        },
-        {
-            title: 'Action',
-            dataIndex: 'action',
-            key: 'action',
-        },
-    ];
+  const renderCourseDetail = () => {
     return (
-        <div className=" h-full w-full text-center px-5">
-
-            <h1 className="mt-12 mb-16 text-5xl font-bold">List Pending Courses</h1>
-            <Table dataSource={dataSource} columns={columns} />
-
-
-
-
+      <div className="flex flex-col">
+        <div className="flex justify-between w-full items-center">
+          <Button
+            onClick={() => setCourse(null)}
+            className="w-[150px] mt-4 mb-3  text-white bg-[#7F00FF]"
+          >
+            &larr; Back
+          </Button>
         </div>
+
+        <Card
+          className="text-left"
+          title={
+            <div className="flex items-center justify-between">
+              <span className="text-[25px]">{course.name}</span>{" "}
+            </div>
+          }
+        >
+          {course.lessons.map((lesson) => (
+            <Card.Grid key={lesson.id} style={gridStyle}>
+              <VideoPlayer key={lesson.id} lesson={lesson} />
+              <Card type="inner" title=""></Card>
+            </Card.Grid>
+          ))}
+        </Card>
+      </div>
     );
-}
-export default ListPendingCourse;
+  };
+
+  return (
+    <div className=" h-full w-full text-center px-5">
+      {course ? (
+        renderCourseDetail()
+      ) : (
+        <>
+          <h1 className="mt-12 mb-16 text-5xl font-bold">List course</h1>
+          <Table columns={columns} dataSource={data} />
+        </>
+      )}
+      <Modal
+        title="Active course"
+        open={isShowActiveModal}
+        onCancel={handleCancel}
+        onOk={handleActiveCourse}
+      >
+        <p>Are you sure to active this course?</p>
+      </Modal>
+    </div>
+  );
+};
+export default ListCourseTab;
