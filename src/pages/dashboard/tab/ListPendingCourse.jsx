@@ -66,7 +66,7 @@ const ListCourseTab = () => {
       key: "expert",
     },
     {
-      title: "Price (VND)",
+      title: "Price (USD)",
       dataIndex: "price",
       key: "price",
     },

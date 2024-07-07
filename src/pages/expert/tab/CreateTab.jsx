@@ -112,7 +112,7 @@ const CreateTab = () => {
             title="Choose lesson video"
           />
         </Form.Item>
-        <Form.Item name="price" label="Price(VND)" rules={[{ required: true }]}>
+        <Form.Item name="price" label="Price(USD)" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
         <Form.Item

@@ -154,7 +154,7 @@ const ListCourseTab = () => {
       key: "id",
     },
     {
-      title: "Price (VND)",
+      title: "Price (USD)",
       dataIndex: "price",
       key: "price",
     },
@@ -298,7 +298,7 @@ const ListCourseTab = () => {
               <div>
                 {" "}
                 <Tag color={"green"}>{course?.totalUserBuy} Student</Tag>
-                <Tag color={"gold"}>Make {course?.income} VND</Tag>
+                <Tag color={"gold"}>Make {course?.income} USD</Tag>
               </div>
             </div>
           }
@@ -399,7 +399,7 @@ const ListCourseTab = () => {
 
           <Form.Item
             name="price"
-            label="Price(VND)"
+            label="Price(USD)"
             rules={[{ required: true }]}
           >
             <Input />

@@ -12,9 +12,6 @@ const useUserInfo = () => {
         },
       }),
     enabled: !!token,
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
   })?.data?.data;
 };
 export default useUserInfo;

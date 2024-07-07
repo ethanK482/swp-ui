@@ -119,7 +119,7 @@ const CourseDetail = () => {
               }
             >
               <div className="flex items-center  text-black ">
-                <span className="mb-[4px]">đ</span>{" "}
+                <span className="mb-[4px]">$</span>{" "}
                 <p className="  text-4xl ">
                   {course?.price.toLocaleString("vi-VN")}
                 </p>
@@ -178,7 +178,7 @@ const CourseDetail = () => {
             }
           >
             <div className="flex items-center  text-black ">
-              <span className="mb-[4px]">đ</span>{" "}
+              <span className="mb-[4px]">$</span>{" "}
               <p className="  text-4xl ">
                 {course?.price.toLocaleString("vi-VN")}
               </p>

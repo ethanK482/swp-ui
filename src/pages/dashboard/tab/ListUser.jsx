@@ -173,7 +173,7 @@ const ListUser = () => {
               title="Platform income"
               value={statistics?.totalIncome}
               formatter={formatter}
-              suffix="VND"
+              suffix="USD"
             />
           </Card>
         </Col>

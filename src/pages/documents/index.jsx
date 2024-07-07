@@ -22,23 +22,51 @@ import Loading from "../../components/loading";
 import { ACTIVE_RESOURCE } from "../../common/constants";
 const ITEM_DISPLAY = 12;
 const Document = () => {
+  //common//
   const queryClient = useQueryClient();
+  const token = localStorage.getItem("token");
+  //common//
+
+  //state//
+  // trang thái show upload document modal
   const [isViewModal, setIsViewModal] = useState(false);
+  // phân trang
   const [page, setPage] = useState(1);
+
+  const [topicFilter, setTopicFilter] = useState();
+  const [displayDocuments, setDisplayDocuments] = useState([]);
+  const [search, setSearch] = useState("");
+  const [files, setFiles] = useState(null);
+
+  //state//
+
+  //function//
   const onChangePage = (page) => {
     setPage(page);
   };
-  const documents = useAllDocuments();
-  const topics = useAllTopic();
-  const [topicFilter, setTopicFilter] = useState();
-  const [search, setSearch] = useState("");
-  const [displayDocuments, setDisplayDocuments] = useState([]);
   const topicOptions = () => {
     return topics?.map((topic) => ({
       value: topic.id,
       label: <span>{topic.name}</span>,
     }));
   };
+  const handleChangeBanner = (info) => {
+    const file = info.files[0];
+    if (!file.name.includes("pdf")) {
+      notification.error({ message: "Document must be pdf file" });
+      setFiles(null);
+    } else {
+      setFiles(info.files);
+    }
+  };
+  //function//
+
+  //data//
+  const documents = useAllDocuments();
+  const topics = useAllTopic();
+  //data//
+
+  //effect//
   useEffect(() => {
     let filteredDocuments = documents?.filter(
       (flashcard) => flashcard.state === ACTIVE_RESOURCE
@@ -56,23 +84,14 @@ const Document = () => {
           .includes(search.toLowerCase().trim())
       );
     }
+    //effect//
     const startIndex = (page - 1) * ITEM_DISPLAY;
     const endIndex = startIndex + ITEM_DISPLAY;
     setDisplayDocuments(filteredDocuments?.slice(startIndex, endIndex));
   }, [documents, page, topicFilter, search]);
-  const [files, setFiles] = useState(null);
-  const handleChangeBanner = (info) => {
-    const file = info.files[0];
-    if (!file.name.includes("pdf")) {
-      notification.error({ message: "Document must be pdf file" });
-      setFiles(null);
-    } else {
-      setFiles(info.files);
-    }
-  };
+
   const isDisableButton = files == null;
 
-  const token = localStorage.getItem("token");
   const uploadDocument = useMutation({
     mutationFn: (formData) => {
       return api.post("/upload-document", formData, {

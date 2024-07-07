@@ -43,7 +43,7 @@ const CourseCard = ({ course, expert }) => {
           </span>
         </div>
         <div className="flex items-center text-black ">
-          <span className="mb-[4px]">đ</span>{" "}
+          <span className="mb-[4px]">$</span>{" "}
           <p className="  text-xl ">{course.price.toLocaleString("vi-VN")}</p>
         </div>
       </Card>

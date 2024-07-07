@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 import MyFlashCard from "./components/myFlashcard";
 import MyDocument from "./components/myDocument";
+import { FaMoneyBillWave } from "react-icons/fa";
 import {
   ADMIN,
   EXPERT,
@@ -64,6 +65,7 @@ const Profile = () => {
       });
     }
   }, [user, form]);
+  const userBalance = Number(user?.balance);
   const onFinish = (values) => {
     const body = { ...values, dob: new Date(_dob) };
     updateProfile.mutate(body, {
@@ -76,6 +78,7 @@ const Profile = () => {
       },
     });
   };
+
   const uploadAvatar = useMutation({
     mutationFn: (formData) => {
       return api.patch("/update-avatar", formData, {
@@ -96,6 +99,15 @@ const Profile = () => {
       });
     },
   });
+  const withdrawMutation = useMutation({
+    mutationFn: (amount) => {
+      return api.post("/transfer", amount, {
+        headers: {
+          Authorization: token,
+        },
+      });
+    },
+  });
   const [files, setFiles] = useState(null);
   const handleChangeCV = (info) => {
     const file = info.files[0];
@@ -108,6 +120,26 @@ const Profile = () => {
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShowExertRequest, setIsShowExertRequest] = useState(false);
+  const [isShowWithdrawModal, setIsShowWithdrawModal] = useState(false);
+  const handleCloseWithdrawModal = () => {
+    setIsShowWithdrawModal(false);
+  };
+  const handleOpenWithdrawModal = () => setIsShowWithdrawModal(true);
+
+  const handleWithdraw = () => {
+    withdrawMutation.mutate(withDrawAmount, {
+      onSuccess() {
+        notification.success({ message: "Successfully" });
+        setIsShowWithdrawModal(false);
+      },
+      onError() {
+        notification.error({
+          message:
+            "Withdraw failed, make sure you checked mail and provided wallet information, try again later",
+        });
+      },
+    });
+  };
   const handleCancelRequestModal = () => {
     setIsShowExertRequest(false);
   };
@@ -151,6 +183,14 @@ const Profile = () => {
 
     setIsModalOpen(false);
   };
+  const [withDrawAmount, setWithdrawAmount] = useState(0);
+  const handleChangeAmount = (amount) => {
+    setWithdrawAmount(amount);
+  };
+  const isDisableWithdrawButton =
+    withDrawAmount < 10 ||
+    withDrawAmount > userBalance ||
+    !Number.isInteger(Number(withDrawAmount));
   const navigate = useNavigate();
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -232,6 +272,9 @@ const Profile = () => {
       );
     return <p>Keep your contribute</p>;
   };
+  const isShowRequestButton =
+    user?.legitMark >= EXPERT_MARK_DEMAND && role == "USER";
+
   const menuItems = [
     getManagement(),
     {
@@ -279,23 +322,30 @@ const Profile = () => {
               }
             </Popover>
           </div>
-          {!!user?.balance && (
-            <Tag color="gold" className="mt-2">
-              {" "}
-              Balance: {Number(user.balance).toLocaleString()}đ
-            </Tag>
+          {!!userBalance && (
+            <>
+              <Tag color="gold" className="mt-2">
+                {" "}
+                Balance: {Number(user.balance).toLocaleString()}$
+              </Tag>
+              {userBalance > 5 && (
+                <Button onClick={handleOpenWithdrawModal} className="mt-2">
+                  <div className="flex items-center gap-2">
+                    Withdraw <FaMoneyBillWave />
+                  </div>
+                </Button>
+              )}
+            </>
           )}
-          {user?.legitMark >= EXPERT_MARK_DEMAND &&
-            user?.role != EXPERT &&
-            user?.role != ADMIN && (
-              <Button
-                onClick={() => setIsShowExertRequest(true)}
-                type="primary"
-                className="mt-3"
-              >
-                Apply to be Platform Expert
-              </Button>
-            )}
+          {isShowRequestButton && (
+            <Button
+              onClick={() => setIsShowExertRequest(true)}
+              type="primary"
+              className="mt-3"
+            >
+              Apply to be Platform Expert
+            </Button>
+          )}
           <div>
             <Menu
               onClick={menuOnclick}
@@ -371,7 +421,7 @@ const Profile = () => {
         />
       </Modal>
       <Modal
-        title="Update user state"
+        title="Apply to be expert"
         open={isShowExertRequest}
         onCancel={handleCancelRequestModal}
         onOk={handleSendRequest}
@@ -383,6 +433,44 @@ const Profile = () => {
         <p className="text-[orange]">
           If your request is pending, please do not resubmit
         </p>
+      </Modal>
+
+      <Modal
+        title="Withdraw money"
+        open={isShowWithdrawModal}
+        onCancel={handleCloseWithdrawModal}
+        onOk={handleWithdraw}
+        okButtonProps={{ disabled: isDisableWithdrawButton }}
+        confirmLoading={withdrawMutation.isPending}
+      >
+        <Form>
+          <Form.Item
+            label="Amount"
+            rules={[
+              {
+                type: "number",
+                message: "Amount must be a number",
+              },
+              {
+                required: true,
+              },
+            ]}
+          >
+            <Input
+              type="number"
+              placeholder="Amount"
+              value={withDrawAmount}
+              onChange={(e) => handleChangeAmount(e.target.value)}
+              suffix="USD"
+            />
+            <div className="mt-2">
+              {" "}
+              <Tag color="green">min: 10$</Tag>{" "}
+              <Tag color="green">max: {userBalance}$</Tag>
+              <Tag color="gold">Allow Integer</Tag>
+            </div>
+          </Form.Item>
+        </Form>
       </Modal>
     </ProfileStyle>
   );
