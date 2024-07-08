@@ -3,12 +3,18 @@ import { Button, Table, notification } from "antd";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "../../../api/http";
 import { useNavigate } from "react-router-dom";
+import useAllTopic from "../../../hook/topic/useAllTopic";
+import useAllUser from "../../../hook/user/useAllUser";
 
 const ListPendingFlashcard = () => {
   const queryClient = useQueryClient();
   const flashcards = useAllFlashCard();
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const topics = useAllTopic();
+  const users = useAllUser();
+  const getTopicNameById = (id) => topics?.find((topic) => topic.id == id).name;
+  const getEmailById = (id) => users?.find((user) => user.id == id).email;
   const activeMutation = useMutation({
     mutationFn: ({ formData }) => {
       return api.put(`/flashcard/acitve`, formData, {
@@ -40,8 +46,8 @@ const ListPendingFlashcard = () => {
   const dataSource = pendingFlashCards?.map((flashcard) => {
     return {
       flashcardName: flashcard.name,
-      flashcardId: flashcard.id,
-      topic: flashcard.topicId,
+      author: getEmailById(flashcard.userId),
+      topic: getTopicNameById(flashcard.topicId),
       descriptions: flashcard.description,
       action: (
         <>
@@ -67,9 +73,9 @@ const ListPendingFlashcard = () => {
       key: "flashcardName",
     },
     {
-      title: "FlashcardId",
-      dataIndex: "flashcardId",
-      key: "flashcardId",
+      title: "Author",
+      dataIndex: "author",
+      key: "author",
     },
     {
       title: "Topic",
