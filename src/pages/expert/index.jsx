@@ -5,9 +5,11 @@ import { useState } from "react";
 import CreateTab from "./tab/CreateTab";
 import ListCourseTab from "./tab/ListcourseTab.jsx";
 import { expertRequire } from "../../common/expertRequire.js";
+import WithdrawHistories from "./tab/WithdrawHistories.jsx";
 const items = [
   { key: "1", icon: <PieChartOutlined />, label: "Create course" },
   { key: "2", icon: <DesktopOutlined />, label: "List course" },
+  { key: "3", icon: <DesktopOutlined />, label: "Withdraw histories" },
 ];
 const ExpertDashboard = () => {
   expertRequire();
@@ -21,6 +23,8 @@ const ExpertDashboard = () => {
         return <CreateTab />;
       case "2":
         return <ListCourseTab />;
+      case "3":
+        return <WithdrawHistories />;
       default:
         return <div>Default Content</div>;
     }
