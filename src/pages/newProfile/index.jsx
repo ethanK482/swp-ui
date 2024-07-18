@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/loading";
 import MyFlashCard from "./components/myFlashcard";
 import MyDocument from "./components/myDocument";
+import MyRequest from "./components/myRequest";
 import { FaMoneyBillWave } from "react-icons/fa";
 import {
   ADMIN,
@@ -406,6 +407,7 @@ const Profile = () => {
       <MyFlashCard />
       <MyDocument />
       <MyPost />
+      <MyRequest/>
       <Modal
         title="Update avatar ?"
         open={isModalOpen}
