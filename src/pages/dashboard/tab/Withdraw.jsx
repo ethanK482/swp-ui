@@ -1,9 +1,10 @@
-
 import { Table } from "antd";
-import useAllWithdrawHistories from "../../../hook/user/useAllWithdrawHistories";
+import useAdminWithdrawHistories from "../../../hook/user/useAdminWithdrawHistories";
 
 const Withdraw = () => {
-  const withdrawHistories  = useAllWithdrawHistories();
+  const withdrawHistories = useAdminWithdrawHistories()?.sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 
   const dataSource = withdrawHistories?.map((withdraw) => {
     return {
@@ -40,7 +41,7 @@ const Withdraw = () => {
   return (
     <div className="h-full w-full text-center px-5">
       <h1 className="mt-12 mb-16 text-5xl font-bold">Withdraw Histories</h1>
-       <Table dataSource={dataSource} columns={columns} /> 
+      <Table dataSource={dataSource} columns={columns} />
     </div>
   );
 };

@@ -1,10 +1,8 @@
 import { Table } from "antd";
-import useAllHistories from "../../../hook/user/useAllWithdrawHistories";
-
+import useExpertWithdrawHistories from "../../../hook/user/useExpertWithdrawHistories";
 const WithdrawHistories = () => {
-  const histories = useAllHistories();
+  const histories = useExpertWithdrawHistories();
 
-  console.log(histories);
   const columms = [
     {
       title: "index",
