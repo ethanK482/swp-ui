@@ -3,10 +3,16 @@ import { Button, Table, notification } from "antd";
 import api from "../../../api/http";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import useAllTopic from "../../../hook/topic/useAllTopic";
+import useAllUser from "../../../hook/user/useAllUser";
 const ListPendingDocument = () => {
   const documents = useAllDocuments();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const topics = useAllTopic();
+  const users = useAllUser();
+  const getTopicNameById = (id) => topics?.find((topic) => topic.id == id).name;
+  const getEmailById = (id) => users?.find((user) => user.id == id).email;
   const token = localStorage.getItem("token");
   const activeMutation = useMutation({
     mutationFn: ({ formData }) => {
@@ -40,8 +46,8 @@ const ListPendingDocument = () => {
     return {
       state: document.state,
       documentTitle: document.title,
-      documentId: document.id,
-      topic: document.topicId,
+      author: getEmailById(document.userId),
+      topic: getTopicNameById(document.topicId),
       descriptions: document.description,
       action: (
         <>
@@ -67,9 +73,9 @@ const ListPendingDocument = () => {
       key: "documentTitle",
     },
     {
-      title: "DocumentId",
-      dataIndex: "documentId",
-      key: "documentId",
+      title: "Author",
+      dataIndex: "author",
+      key: "author",
     },
     {
       title: "Topic",
