@@ -75,12 +75,14 @@ const FlashcardScreen = () => {
       });
     },
   });
+  const [form] = Form.useForm();
   const onSubmitForm = (body) => {
     createFlashCard.mutate(body, {
       onSuccess() {
         queryClient.invalidateQueries("flashcards");
         notification.success({ message: "Create successfully" });
         setIsViewModal(false);
+        form.resetFields();
       },
     });
   };
@@ -148,7 +150,7 @@ const FlashcardScreen = () => {
         open={isViewModal}
         onCancel={() => setIsViewModal(false)}
       >
-        <Form onFinish={onSubmitForm} layout="vertical">
+        <Form form={form} onFinish={onSubmitForm} layout="vertical">
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />
           </Form.Item>

@@ -92,7 +92,7 @@ const Comment = ({ comments, postId }) => {
     },
   });
   //mutation
-
+  const [formComment] = Form.useForm();
   //call api
   const handleComment = ({ content }) => {
     const formData = new FormData();
@@ -104,6 +104,7 @@ const Comment = ({ comments, postId }) => {
         setImageFile(undefined);
         queryClient.invalidateQueries("posts");
         queryClient.invalidateQueries("myposts");
+        form.resetFields();
       },
     });
   };
@@ -154,7 +155,7 @@ const Comment = ({ comments, postId }) => {
           </h2>
         </div>
         {isLogin && (
-          <Form onFinish={handleComment} layout="vertical">
+          <Form form={formComment} onFinish={handleComment} layout="vertical">
             <Form.Item name="content" rules={[{ required: true }]}>
               <Input.TextArea placeholder="enter your comment" />
             </Form.Item>

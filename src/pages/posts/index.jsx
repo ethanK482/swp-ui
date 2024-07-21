@@ -40,6 +40,7 @@ const PostScreen = () => {
       });
     },
   });
+  const [form] = Form.useForm();
   const onCreatePost = ({ content }) => {
     const formData = new FormData();
     formData.append("content", content);
@@ -49,6 +50,7 @@ const PostScreen = () => {
         queryClient.invalidateQueries("posts");
         setIsViewModal(false);
         notification.success({ message: "Create post successfully" });
+        form.resetFields();
       },
     });
   };
@@ -90,7 +92,7 @@ const PostScreen = () => {
             open={isViewModal}
             onCancel={() => setIsViewModal(false)}
           >
-            <Form onFinish={onCreatePost} layout="vertical">
+            <Form form={form} onFinish={onCreatePost} layout="vertical">
               <Form.Item name="content" rules={[{ required: true }]}>
                 <Input.TextArea placeholder="enter your post content" />
               </Form.Item>

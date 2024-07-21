@@ -102,6 +102,7 @@ const Document = () => {
       });
     },
   });
+  const [form] = Form.useForm();
   const onSubmitForm = (body) => {
     const formData = new FormData();
     formData.append("title", body.title);
@@ -113,6 +114,7 @@ const Document = () => {
         queryClient.invalidateQueries("documents");
         notification.success({ message: "Upload successfully" });
         setIsViewModal(false);
+        form.resetFields();
       },
     });
   };
@@ -180,7 +182,7 @@ const Document = () => {
         open={isViewModal}
         onCancel={() => setIsViewModal(false)}
       >
-        <Form onFinish={onSubmitForm} layout="vertical">
+        <Form form={form} onFinish={onSubmitForm} layout="vertical">
           <Form.Item name="title" label="Title" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
