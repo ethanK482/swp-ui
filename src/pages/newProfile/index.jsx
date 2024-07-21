@@ -131,6 +131,8 @@ const Profile = () => {
     withdrawMutation.mutate(withDrawAmount, {
       onSuccess() {
         notification.success({ message: "Successfully" });
+        queryClient.invalidateQueries("histories");
+        queryClient.invalidateQueries("PROFILE");
         setIsShowWithdrawModal(false);
       },
       onError() {
@@ -407,7 +409,7 @@ const Profile = () => {
       <MyFlashCard />
       <MyDocument />
       <MyPost />
-      <MyRequest/>
+      <MyRequest />
       <Modal
         title="Update avatar ?"
         open={isModalOpen}
