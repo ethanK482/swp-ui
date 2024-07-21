@@ -11,9 +11,6 @@ const useAdminWithdrawHistories = () => {
           Authorization: token,
         },
       }),
-    cacheTime: Infinity,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
   })?.data?.data;
 };
 
