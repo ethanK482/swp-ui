@@ -43,6 +43,7 @@ const FlashcardScreen = () => {
       label: <span>{topic.name}</span>,
     }));
   };
+  const [totalDisplay, setTotalDisplay] = useState(flashcards?.length);
   useEffect(() => {
     let filteredFlashcards = flashcards?.filter(
       (flashcard) => flashcard.state === ACTIVE_RESOURCE
@@ -63,6 +64,7 @@ const FlashcardScreen = () => {
     const startIndex = (page - 1) * ITEM_DISPLAY;
     const endIndex = startIndex + ITEM_DISPLAY;
     setDisplayFlashcards(filteredFlashcards?.slice(startIndex, endIndex));
+    setTotalDisplay(filteredFlashcards?.length);
   }, [flashcards, page, topicFilter, search]);
 
   const token = localStorage.getItem("token");
@@ -140,7 +142,7 @@ const FlashcardScreen = () => {
         <Pagination
           style={{ textAlign: "center", marginTop: "1rem" }}
           defaultCurrent={1}
-          total={flashcards?.length}
+          total={totalDisplay}
           onChange={onChangePage}
         />
       </div>

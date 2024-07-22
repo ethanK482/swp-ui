@@ -65,7 +65,7 @@ const Document = () => {
   const documents = useAllDocuments();
   const topics = useAllTopic();
   //data//
-
+  const [totalDisplay, setTotalDisplay] = useState(documents?.length);
   //effect//
   useEffect(() => {
     let filteredDocuments = documents?.filter(
@@ -88,6 +88,7 @@ const Document = () => {
     const startIndex = (page - 1) * ITEM_DISPLAY;
     const endIndex = startIndex + ITEM_DISPLAY;
     setDisplayDocuments(filteredDocuments?.slice(startIndex, endIndex));
+    setTotalDisplay(filteredDocuments?.length);
   }, [documents, page, topicFilter, search]);
 
   const isDisableButton = files == null;
@@ -172,7 +173,7 @@ const Document = () => {
         <Pagination
           style={{ textAlign: "center", marginTop: "1rem" }}
           defaultCurrent={1}
-          total={documents?.length}
+          total={totalDisplay}
           onChange={onChangePage}
         />
       </div>
