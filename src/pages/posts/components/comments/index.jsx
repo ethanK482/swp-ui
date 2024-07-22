@@ -104,7 +104,7 @@ const Comment = ({ comments, postId }) => {
         setImageFile(undefined);
         queryClient.invalidateQueries("posts");
         queryClient.invalidateQueries("myposts");
-        form.resetFields();
+        formComment.resetFields();
       },
     });
   };
